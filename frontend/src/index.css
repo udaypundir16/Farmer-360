@@ -1,0 +1,687 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== CSS Custom Properties (Agriculture Theme) ========== */
+:root {
+  --color-primary: #2D5016;
+  --color-primary-mid: #3A6B35;
+  --color-primary-light: #4A7C59;
+  --color-earth: #8B4513;
+  --color-earth-mid: #A0522D;
+  --color-earth-light: #D2691E;
+  --color-gold: #F4A460;
+  --color-gold-mid: #DAA520;
+  --color-gold-bright: #FFD700;
+  --color-crop: #7CB342;
+  --color-crop-light: #9CCC65;
+  --color-cream: #FAF8F3;
+  --color-cream-light: #F5F1E8;
+  --color-cream-warm: #FFF8DC;
+  --color-soil: #3E2723;
+  --color-soil-light: #4E342E;
+  --transition-agri: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-agri: 0 4px 14px rgba(45, 80, 22, 0.12);
+  --shadow-agri-lg: 0 20px 40px -12px rgba(45, 80, 22, 0.18);
+  --radius-agri: 12px;
+  --radius-agri-lg: 16px;
+}
+
+/* ========== Keyframes ========== */
+@keyframes slideInCenter {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes wheatSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes typingDot {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ========== Base Styles ========== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-cream-100 text-soil antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    /* Prevent layout shift */
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    @apply font-semibold text-soil;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+    font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    @apply font-semibold text-soil;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+    font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    @apply font-semibold text-soil;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    @apply font-semibold text-soil;
+  }
+
+  a {
+    @apply text-primary-700 hover:text-primary transition-colors duration-300;
+  }
+
+  /* Focus states for accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+
+  /* Ensure proper input styling on iOS */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+    /* Prevents auto-zoom on iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  /* Better button focus on touch devices */
+  button,
+  a {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* ========== Component Utilities ========== */
+@layer components {
+
+  /* Responsive Container */
+  .container {
+    @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 641px) {
+    .container {
+      max-width: 640px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      max-width: 728px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 960px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1152px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1344px;
+    }
+  }
+
+  /* Buttons - Touch-friendly */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 min-h-[44px] min-w-[44px];
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  @media (max-width: 640px) {
+    .btn {
+      @apply px-3 py-2.5;
+    }
+  }
+
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-primary-700 to-primary-600 text-white hover:scale-[1.02] active:scale-[0.98];
+    box-shadow: var(--shadow-agri);
+  }
+
+  .btn-primary:hover {
+    box-shadow: var(--shadow-agri-lg);
+  }
+
+  .btn-secondary {
+    @apply btn border-2 border-earth-500 text-earth-600 hover:bg-earth-50 hover:border-earth-600;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-primary-600 text-primary-700 hover:bg-primary-50;
+  }
+
+  /* Cards */
+  .card-agri {
+    @apply bg-white overflow-hidden transition-all duration-300;
+    border-radius: var(--radius-agri-lg);
+    box-shadow: var(--shadow-agri);
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='%232D5016' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .card-agri:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-agri-lg);
+  }
+
+  @media (max-width: 640px) {
+    .card-agri {
+      transform: translateY(0);
+    }
+
+    .card-agri:active {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/80 border border-white/20 shadow-lg;
+    backdrop-filter: blur(10px);
+  }
+
+  .glass-navbar {
+    @apply bg-cream-100/85 border-b border-primary-100/50;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Page backgrounds with optional image */
+  .page-bg-cream {
+    @apply min-h-screen bg-cream-100;
+  }
+
+  .page-bg-pattern {
+    position: relative;
+  }
+
+  .page-bg-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--page-pattern, url('/images/pattern-wheat.svg'));
+    background-size: 120px 120px;
+    background-repeat: repeat;
+    background-position: center top;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-bg-pattern>* {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Form inputs - Better for mobile */
+  .form-input-agri {
+    @apply w-full px-4 py-2.5 md:py-3 rounded-lg bg-cream-50 border-2 border-primary-100 text-soil placeholder-soil/50 text-base;
+    transition: var(--transition-agri);
+    min-height: 44px;
+    /* Touch target size */
+  }
+
+  .form-input-agri:focus {
+    @apply outline-none border-primary-500 ring-4 ring-primary-500/15 bg-white;
+  }
+
+  .form-input-agri.error {
+    @apply border-error ring-2 ring-error/20;
+  }
+
+  /* Validation states */
+  .input-valid {
+    @apply border-crop ring-2 ring-crop/20;
+  }
+
+  .input-error {
+    @apply border-error ring-2 ring-error/20;
+  }
+
+  /* Login / legacy */
+  .login-container {
+    animation: slideInCenter 0.6s ease-out;
+  }
+
+  .logo-section {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .submit-button {
+    @apply w-full bg-gradient-to-r from-primary-700 to-primary-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 active:scale-[0.98] min-h-[44px];
+    box-shadow: var(--shadow-agri);
+  }
+
+  .submit-button:hover {
+    box-shadow: var(--shadow-agri-lg);
+  }
+
+  .submit-button:disabled {
+    @apply opacity-70 cursor-not-allowed;
+  }
+
+  .error-message {
+    @apply p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm md:text-base;
+    animation: slideInCenter 0.3s ease-out;
+  }
+
+  /* Text truncation utilities */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ========== Utility Classes ========== */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.4s ease-out;
+  }
+
+  .stagger-1 {
+    animation-delay: 0.05s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.15s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-5 {
+    animation-delay: 0.25s;
+  }
+
+  .stagger-6 {
+    animation-delay: 0.3s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  /* Better responsive spacing */
+  .px-fluid {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .py-fluid {
+    @apply py-6 sm:py-8 lg:py-12;
+  }
+
+  /* Viewport-relative units for better scaling */
+  .max-container {
+    @apply w-full max-w-7xl mx-auto;
+  }
+
+  /* Safe area padding for notched devices */
+  .safe-area {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* ========== Responsive Typography ========== */
+@media (max-width: 640px) {
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  p,
+  span,
+  a {
+    @apply text-sm;
+  }
+
+  /* Better line height for mobile */
+  body {
+    line-height: 1.7;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+}
+
+/* ========== Mobile-First Responsive Grid Fixes ========== */
+@media (max-width: 640px) {
+
+  /* Force single column layouts on mobile */
+  [class*="grid-cols-"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-cols-3,
+  .grid-cols-4,
+  .grid-cols-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Reduce gap on mobile */
+  .gap-6 {
+    gap: 12px !important;
+  }
+
+  .gap-8 {
+    gap: 16px !important;
+  }
+
+  /* Better padding on mobile */
+  .p-6,
+  .p-8 {
+    padding: 16px !important;
+  }
+
+  /* Mobile navbar adjustments */
+  .navbar-item {
+    display: block;
+    width: 100%;
+  }
+
+  /* Flexible sections */
+  .md\:w-1\/2,
+  .md\:w-1\/3,
+  .lg\:w-1\/4 {
+    width: 100% !important;
+  }
+
+  /* Tab padding */
+  .tab-padding {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* Better form handling */
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-row.two-col {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ========== Scroll-triggered fade ========== */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* ========== Landscape Mode Fixes ========== */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    line-height: 1.4;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+}
+
+/* ========== High DPI/Retina Display Fixes ========== */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .card-agri {
+    border: 1px solid rgba(45, 80, 22, 0.05);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ========== Accessibility Improvements ========== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========== Dark Mode Preparation ========== */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-slate-900;
+  }
+}

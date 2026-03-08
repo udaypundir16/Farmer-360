@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+
+    
+    <!-- Essential Viewport & Mobile Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white-content" />
+    <meta name="apple-mobile-web-app-title" content="SmartAgri" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#2D5016" />
+    
+    <!-- PWA & Performance -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="description" content="Smart Agricultural Intelligence Platform for Farmers" />
+    <meta name="keywords" content="agriculture, farming, smart, marketplace, schemes, crop" />
+    
+    <title>Smart Agricultural Intelligence Platform</title>
+    
+    <!-- Agriculture theme typography: Poppins (headings), Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Prevent zoom on input focus for iOS -->
+    <style>
+      @media (max-width: 768px) {
+        input, textarea, select {
+          font-size: 16px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
