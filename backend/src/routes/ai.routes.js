@@ -2,9 +2,15 @@ const express = require('express');
 const router = express.Router();
 const aiController = require('../controllers/ai.controller');
 const { verifyToken } = require('../middleware/auth.middleware');
-const rateLimiter = require('../middleware/rateLimiter.middleware');
+const { aiDailyRateLimiter, getAiUsageStatus } = require('../middleware/aiRateLimiter.middleware');
 
-router.post('/chat', verifyToken, rateLimiter({ windowMs: 60 * 1000, max: 10 }), aiController.chat);
-router.post('/voice', verifyToken, rateLimiter({ windowMs: 60 * 1000, max: 15 }), aiController.voice);
+// AI Chatbot (20 req/day for users, unlimited for admin)
+router.post('/chat', verifyToken, aiDailyRateLimiter, aiController.chat);
+
+// AI Voice Assistant (20 req/day for users, unlimited for admin)
+router.post('/voice', verifyToken, aiDailyRateLimiter, aiController.voice);
+
+// AI Usage Status
+router.get('/usage', verifyToken, getAiUsageStatus);
 
 module.exports = router;

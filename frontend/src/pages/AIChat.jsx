@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { sendMessage } from '../services/ai.service';
+import { sendMessage, getAiUsage } from '../services/ai.service';
 import ChatMessage from '../components/ai/ChatMessage';
 import ChatInput from '../components/ai/ChatInput';
 import QuickActions from '../components/ai/QuickActions';
-import { MessageCircle, Bot } from 'lucide-react';
+import { MessageCircle, Bot, Zap, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ export default function AIChat() {
   const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
+  const [usage, setUsage] = useState(null);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const prevLengthRef = useRef(0);
@@ -24,7 +25,13 @@ export default function AIChat() {
       setMessages(parsed);
       prevLengthRef.current = parsed.length;
     }
+    loadUsage();
   }, []);
+
+  const loadUsage = async () => {
+    const info = await getAiUsage();
+    setUsage(info);
+  };
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -64,11 +71,13 @@ export default function AIChat() {
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
+      loadUsage(); // Refresh usage remaining
     } catch (error) {
       console.error('AI Chat error:', error);
-      let errorMessage = t('ai_chat.error_message');
+      let errorMessage = error.response?.data?.message || t('ai_chat.error_message');
       const errorMsg = { role: 'assistant', content: errorMessage, timestamp: new Date() };
       setMessages(prev => [...prev, errorMsg]);
+      loadUsage();
     } finally {
       setSending(false);
     }
@@ -82,7 +91,7 @@ export default function AIChat() {
         style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1920)' }}
       />
       <div className="container mx-auto p-4 relative z-10">
-        <div className="mb-6 flex flex-col items-center animate-fade-in-up">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 max-w-4xl mx-auto animate-fade-in-up">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-agri-lg bg-gradient-to-br from-primary-600 to-primary-700 shadow-agri">
               <Bot size={24} className="text-gold-200" />
@@ -91,9 +100,28 @@ export default function AIChat() {
               <h1 className="font-heading text-3xl md:text-4xl font-bold text-primary-800">
                 {t('ai_chat.title')}
               </h1>
-              <p className="text-soil-light text-center md:text-left">{t('ai_chat.subtitle')}</p>
+              <p className="text-soil-light">{t('ai_chat.subtitle')}</p>
             </div>
           </div>
+
+          {/* Daily Quota Badge */}
+          {usage && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 border border-primary-100 shadow-sm text-xs">
+              {usage.isAdmin ? (
+                <>
+                  <Shield size={15} className="text-primary-700" />
+                  <span className="font-semibold text-primary-800">Admin: Unlimited Access</span>
+                </>
+              ) : (
+                <>
+                  <Zap size={14} className="text-gold-600" />
+                  <span className="text-soil">
+                    Daily Limit: <strong className={usage.remaining > 0 ? 'text-primary-700' : 'text-red-600'}>{usage.remaining}/{usage.limit}</strong> requests left today
+                  </span>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col h-[calc(100vh-14rem)] max-w-4xl mx-auto rounded-agri-lg shadow-agri-lg bg-white/90 backdrop-blur-sm border border-primary-100 overflow-hidden">

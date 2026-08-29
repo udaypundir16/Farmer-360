@@ -15,3 +15,12 @@ export const sendVoiceMessage = async (audioBase64, contentType = 'wav', languag
   const response = await api.post('/ai/voice', { audio: audioBase64, contentType, language });
   return response.data;
 };
+
+export const getAiUsage = async () => {
+  try {
+    const response = await api.get('/ai/usage');
+    return response.data;
+  } catch (error) {
+    return { limit: 20, used: 0, remaining: 20 };
+  }
+};
