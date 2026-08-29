@@ -20,8 +20,9 @@ exports.chat = async (req, res, next) => {
  */
 exports.voice = async (req, res, next) => {
   try {
-    const { audio, contentType } = req.body; // base64 audio; contentType: 'wav' or 'webm'
+    const { audio, contentType, language } = req.body; // base64 audio; contentType: 'wav' or 'webm'
     const userId = req.user.userId;
+    const userLang = language || req.body.language || req.user?.languagePref || 'en';
 
     if (!audio || typeof audio !== 'string') {
       return res.status(400).json({ message: 'Audio (base64) is required' });
@@ -30,7 +31,7 @@ exports.voice = async (req, res, next) => {
     const audioBuffer = Buffer.from(audio, 'base64');
     if (audioBuffer.length === 0) return res.status(400).json({ message: 'Invalid audio data' });
 
-    const result = await aiService.voiceAssistant(userId, audioBuffer, contentType || 'wav');
+    const result = await aiService.voiceAssistant(userId, audioBuffer, contentType || 'wav', userLang);
     res.json(result);
   } catch (error) {
     next(error);

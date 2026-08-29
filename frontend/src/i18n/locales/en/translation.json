@@ -29,7 +29,18 @@
     "view_details": "View Details",
     "no_data": "No data available",
     "try_again": "Try Again",
-    "at": "at"
+    "at": "at",
+    "features": "Features",
+    "filter": "Filter",
+    "reset": "Reset",
+    "status": "Status",
+    "actions": "Actions",
+    "date": "Date",
+    "time": "Time",
+    "rupees": "₹",
+    "per_quintal": "/ quintal",
+    "per_kg": "/ kg",
+    "per_acre": "/ acre"
   },
   "auth": {
     "welcome_back": "Welcome Back",
@@ -88,7 +99,9 @@
     "feature_schemes": "Schemes",
     "feature_schemes_desc": "Browse and apply for government schemes",
     "feature_ai": "AI Advisor",
-    "feature_ai_desc": "Get personalized farming advice"
+    "feature_ai_desc": "Get personalized farming advice",
+    "quick_actions": "Quick Actions",
+    "view_all": "View All"
   },
   "markets": {
     "title": "📊 Market Prices",
@@ -104,7 +117,14 @@
     "current": "Current",
     "up": "📈 Up",
     "down": "📉 Down",
-    "at": "at"
+    "at": "at",
+    "search_commodity": "Search commodity...",
+    "select_market": "Select Market",
+    "all_markets": "All Markets",
+    "commodity": "Commodity",
+    "market": "Market",
+    "variety": "Variety",
+    "arrival_date": "Arrival Date"
   },
   "schemes": {
     "title": "🎁 Government Schemes",
@@ -134,7 +154,7 @@
     "official_link": "Official Link",
     "no_official_link": "No official website provided.",
     "apply_now": "Apply Now",
-    "govt_data_notice": "This information is sourced from official government records. Fields marked below reflect the latest published data; if a field is blank, details were not provided in the dataset."
+    "govt_data_notice": "This information is sourced from official government records."
   },
   "ai_chat": {
     "title": "AI Farming Assistant",
@@ -150,6 +170,17 @@
     },
     "error_message": "Sorry, I encountered an error. Please try again.",
     "typing": "AI is typing..."
+  },
+  "voice": {
+    "voice_assistant": "Voice Assistant",
+    "speak_prompt": "Tap to speak your question in English or regional language",
+    "listening": "Listening... Speak clearly",
+    "processing": "Processing your voice query...",
+    "stop_recording": "Stop Recording",
+    "start_recording": "Start Recording",
+    "recording_too_short": "Recording too short. Speak for 2–3 seconds and tap Stop.",
+    "mic_permission_denied": "Microphone permission was denied. Please allow microphone access in your browser.",
+    "voice_error": "Could not understand audio. Please try again."
   },
   "alerts": {
     "title": "🚨 Price Alerts",
@@ -230,7 +261,11 @@
     "feels_like": "Feels Like",
     "forecast": "Forecast",
     "today": "Today",
-    "tomorrow": "Tomorrow"
+    "tomorrow": "Tomorrow",
+    "advisory_title": "🌾 Agricultural Weather Advisory",
+    "sunny_advice": "Clear & Sunny: Ideal for harvesting, drying crops, and pest management.",
+    "rain_advice": "Rain Predicted: Postpone chemical spraying and prepare adequate drainage.",
+    "cloudy_advice": "Overcast conditions: Monitor crops for fungal infections."
   },
   "cropcalendar": {
     "title": "🌾 Crop Calendar",
@@ -244,6 +279,9 @@
     "humidity_range": "Humidity: {{range}}",
     "activities_for": "Activities for {{month}}",
     "no_active_crops": "No active crops for {{month}}. Select a different month or crop.",
+    "sowing": "Sowing Period",
+    "harvesting": "Harvesting Period",
+    "growing": "Growing Period",
     "months": {
       "January": "January",
       "February": "February",
@@ -258,23 +296,6 @@
       "November": "November",
       "December": "December"
     }
-  },
-  "nav": {
-    "crop_calendar": "Crop Calendar",
-    "trends": "Trends",
-    "weather": "Weather"
-  },
-  "footer": {
-    "title_quick_links": "Quick Links",
-    "title_features": "Features",
-    "title_support": "Support",
-    "help_center": "Help Center",
-    "contact_us": "Contact Us",
-    "privacy_policy": "Privacy Policy",
-    "terms_of_service": "Terms of Service",
-    "empower_note": "Empowering farmers with intelligent agricultural solutions",
-    "built_with_love": "Built with ❤️ for farmers",
-    "copyright": "© 2025 Smart Agricultural Intelligence Platform. All rights reserved."
   },
   "prediction": {
     "title": "Smart-Agri",
@@ -317,5 +338,142 @@
       "silty": "Silty",
       "peaty": "Peaty"
     }
+  },
+  "profit_calculator": {
+    "title": "💰 Crop Profit Calculator",
+    "subtitle": "Calculate expected returns, costs, and net profitability for your crops",
+    "crop_type": "Crop Type",
+    "select_crop": "Select Crop",
+    "land_area": "Land Area (Acres)",
+    "enter_land_area": "Enter area in acres",
+    "production_cost": "Total Production Cost (₹/Acre)",
+    "enter_cost": "Seeds, fertilizers, labor, irrigation...",
+    "expected_yield": "Expected Yield (Quintals/Acre)",
+    "enter_yield": "Expected yield per acre",
+    "expected_price": "Expected Market Price (₹/Quintal)",
+    "enter_price": "Price per quintal",
+    "calculate_btn": "Calculate Profitability",
+    "calculating": "Calculating...",
+    "results_title": "Financial Breakdown & Analysis",
+    "total_investment": "Total Production Cost",
+    "total_revenue": "Expected Gross Revenue",
+    "net_profit": "Estimated Net Profit",
+    "roi": "Return on Investment (ROI)",
+    "profit_status": "Profit Status",
+    "profitable": "High Profitability Potential",
+    "moderate": "Moderate Margin",
+    "loss": "Risk of Loss",
+    "tips_title": "Profit Optimization Tips",
+    "tip_1": "Consider bulk purchasing of seeds & fertilizers through cooperatives to lower input costs.",
+    "tip_2": "Check current market trends on the Market Prices page before fixing sale agreements.",
+    "tip_3": "Explore government subsidy schemes for micro-irrigation to reduce water/power costs."
+  },
+  "crop_market": {
+    "title": "🌾 Direct Crop Marketplace",
+    "subtitle": "Buy and sell crops directly with local farmers and verified buyers without middlemen",
+    "post_listing": "Post Trade Listing",
+    "all_listings": "All Trade Listings",
+    "buy_requests": "Buy Requests",
+    "sell_offers": "Sell Offers",
+    "search_crops": "Search crops, location, or trader...",
+    "filter_by_type": "Filter by Type",
+    "filter_by_crop": "Filter by Crop",
+    "crop_name": "Crop Name",
+    "quantity": "Quantity",
+    "quantity_unit": "Quintals",
+    "price_per_unit": "Price per Quintal (₹)",
+    "location": "Location / Village",
+    "contact_number": "Contact Number",
+    "description": "Additional Details / Quality",
+    "trade_type": "Trade Type",
+    "selling": "I want to Sell",
+    "buying": "I want to Buy",
+    "contact_trader": "Contact Trader",
+    "no_listings": "No trade listings found. Be the first to post an offer!",
+    "post_success": "Trade listing posted successfully!",
+    "post_trade": "Post Trade"
+  },
+  "forum": {
+    "title": "🌾 Farmer Community Forum",
+    "subtitle": "Ask questions, share farming wisdom, and discuss with fellow farmers across the country",
+    "ask_question": "Ask a Question",
+    "search_discussions": "Search discussions, crops, or farming topics...",
+    "all_topics": "All Topics",
+    "popular": "Popular",
+    "recent": "Recent",
+    "unanswered": "Unanswered",
+    "question_title": "Discussion Title",
+    "enter_title": "e.g. What is the most effective organic spray for leaf curl?",
+    "crop_tag": "Related Crop / Category",
+    "select_tag": "Select Category",
+    "description": "Details / Question Description",
+    "enter_description": "Explain the issue in detail, symptoms observed, soil type, etc.",
+    "your_name": "Your Name",
+    "enter_name": "Enter your name",
+    "post_btn": "Post Discussion",
+    "replies": "Replies",
+    "likes": "Likes",
+    "views": "Views",
+    "reply_placeholder": "Write your advice or answer...",
+    "post_reply": "Post Reply",
+    "no_discussions": "No discussions found. Start a new topic!"
+  },
+  "shipments": {
+    "title": "🚚 Agri Logistics & Shipments",
+    "subtitle": "Track and manage agricultural freight, crop shipments, and transport routes",
+    "create_shipment": "New Shipment",
+    "active_shipments": "Active Shipments",
+    "completed_shipments": "Delivered / Completed",
+    "shipment_id": "Shipment ID",
+    "origin": "Pickup Location",
+    "destination": "Destination / Mandi",
+    "crop": "Crop / Commodity",
+    "weight": "Total Weight (Quintals)",
+    "vehicle_type": "Vehicle Type",
+    "driver_name": "Driver Name",
+    "driver_phone": "Driver Contact",
+    "estimated_delivery": "Est. Delivery Date",
+    "status_in_transit": "In Transit",
+    "status_dispatched": "Dispatched",
+    "status_delivered": "Delivered",
+    "status_delayed": "Delayed",
+    "track_live": "Track Live",
+    "no_shipments": "No shipments currently scheduled."
+  },
+  "admin": {
+    "title": "Admin Management Console",
+    "subtitle": "Manage agricultural datasets, users, market price updates, and system metrics",
+    "total_users": "Registered Farmers",
+    "total_schemes": "Government Schemes",
+    "total_markets": "Monitored Mandis",
+    "total_trades": "Marketplace Listings",
+    "manage_schemes": "Manage Schemes",
+    "manage_markets": "Manage Market Prices",
+    "system_health": "System Health",
+    "export_reports": "Export Data Reports"
+  },
+  "nav": {
+    "crop_calendar": "Crop Calendar",
+    "trends": "Trends",
+    "weather": "Weather",
+    "profit_calculator": "Profit Calc",
+    "crop_market": "Crop Market",
+    "shipments": "Shipments",
+    "forum": "Community Forum",
+    "yield_prediction": "Yield Prediction",
+    "schemes": "Schemes",
+    "markets": "Market Prices"
+  },
+  "footer": {
+    "title_quick_links": "Quick Links",
+    "title_features": "Features",
+    "title_support": "Support",
+    "help_center": "Help Center",
+    "contact_us": "Contact Us",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "empower_note": "Empowering farmers with intelligent agricultural solutions",
+    "built_with_love": "Built with ❤️ for farmers",
+    "copyright": "© 2025 Smart Agricultural Intelligence Platform. All rights reserved."
   }
 }

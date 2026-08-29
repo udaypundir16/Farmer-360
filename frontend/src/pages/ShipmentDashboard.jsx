@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Loader, AlertCircle, Truck, Eye } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ShipmentCard from '../components/shipments/ShipmentCard';
 import ShipmentForm from '../components/shipments/ShipmentForm';
 import ShipmentTimeline from '../components/shipments/ShipmentTimeline';
@@ -7,16 +8,9 @@ import ShipmentStatusUpdate from '../components/shipments/ShipmentStatusUpdate';
 
 /**
  * Shipment Dashboard Page
- * Main page for managing and tracking shipments
- * Features:
- * - View all shipments
- * - Create new shipments
- * - Track shipment status
- * - Update shipment information
- * - Search by shipment ID
  */
-
 const ShipmentDashboard = () => {
+  const { t } = useTranslation();
   // State management
   const [shipments, setShipments] = useState([]);
   const [filteredShipments, setFilteredShipments] = useState([]);
@@ -39,8 +33,8 @@ const ShipmentDashboard = () => {
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // API base URL (adjust based on your backend setup)
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+  // API base URL
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5004/api/v1';
   const authToken = localStorage.getItem('token');
 
   /**
@@ -266,14 +260,14 @@ const ShipmentDashboard = () => {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-3xl font-bold text-gray-900">
               <Truck className="inline mr-2" />
-              Shipment Tracking
+              {t('shipments.title')}
             </h1>
             <button
               onClick={() => setShowForm(true)}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2 font-medium"
             >
               <Plus className="w-4 h-4" />
-              New Shipment
+              {t('shipments.create_shipment')}
             </button>
           </div>
 
@@ -282,7 +276,7 @@ const ShipmentDashboard = () => {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-red-800">Error</h3>
+                <h3 className="font-semibold text-red-800">{t('common.error')}</h3>
                 <p className="text-red-700 text-sm">{error}</p>
               </div>
             </div>
@@ -295,27 +289,25 @@ const ShipmentDashboard = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
           <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">Total</p>
+            <p className="text-gray-600 text-sm font-medium">{t('forum.all_topics')}</p>
             <p className="text-3xl font-bold text-gray-800">{stats.total}</p>
           </div>
-          <div className="bg-yellow-50 rounded-lg shadow p-4 border-l-4 border-yellow-500">
-            <p className="text-gray-600 text-sm font-medium">Created</p>
-            <p className="text-3xl font-bold text-yellow-600">{stats.created}</p>
+          <div className="bg-white rounded-lg shadow p-4">
+            <p className="text-gray-600 text-sm font-medium">{t('shipments.create_shipment')}</p>
+            <p className="text-3xl font-bold text-blue-600">{stats.created}</p>
           </div>
-          <div className="bg-blue-50 rounded-lg shadow p-4 border-l-4 border-blue-500">
-            <p className="text-gray-600 text-sm font-medium">Picked Up</p>
-            <p className="text-3xl font-bold text-blue-600">{stats.pickedUp}</p>
+          <div className="bg-white rounded-lg shadow p-4">
+            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_dispatched')}</p>
+            <p className="text-3xl font-bold text-yellow-600">{stats.pickedUp}</p>
           </div>
-          <div className="bg-purple-50 rounded-lg shadow p-4 border-l-4 border-purple-500">
-            <p className="text-gray-600 text-sm font-medium">In Transit</p>
+          <div className="bg-white rounded-lg shadow p-4">
+            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_in_transit')}</p>
             <p className="text-3xl font-bold text-purple-600">{stats.inTransit}</p>
           </div>
-          <div className="bg-green-50 rounded-lg shadow p-4 border-l-4 border-green-500">
-            <p className="text-gray-600 text-sm font-medium">Delivered</p>
+          <div className="bg-white rounded-lg shadow p-4">
+            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_delivered')}</p>
             <p className="text-3xl font-bold text-green-600">{stats.delivered}</p>
           </div>
-        </div>
-
         {/* Search and Filter Section */}
         <div className="bg-white rounded-lg shadow p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -324,7 +316,7 @@ const ShipmentDashboard = () => {
               <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by Shipment ID or Crop Type..."
+                placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -337,16 +329,16 @@ const ShipmentDashboard = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
-              <option value="all">All Status</option>
-              <option value="created">Created</option>
-              <option value="picked_up">Picked Up</option>
-              <option value="in_transit">In Transit</option>
-              <option value="delivered">Delivered</option>
+              <option value="all">{t('forum.all_topics')}</option>
+              <option value="created">{t('shipments.create_shipment')}</option>
+              <option value="picked_up">{t('shipments.status_dispatched')}</option>
+              <option value="in_transit">{t('shipments.status_in_transit')}</option>
+              <option value="delivered">{t('shipments.status_delivered')}</option>
             </select>
           </div>
-
+        </div>
           <p className="text-sm text-gray-600">
-            Showing {filteredShipments.length} of {shipments.length} shipments
+            {filteredShipments.length} / {shipments.length} {t('shipments.title')}
           </p>
         </div>
 
@@ -358,7 +350,7 @@ const ShipmentDashboard = () => {
               <div className="flex justify-center items-center h-64">
                 <div className="text-center">
                   <Loader className="w-8 h-8 text-green-600 animate-spin mx-auto mb-2" />
-                  <p className="text-gray-600">Loading shipments...</p>
+                  <p className="text-gray-600">{t('common.loading')}</p>
                 </div>
               </div>
             ) : filteredShipments.length > 0 ? (

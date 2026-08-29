@@ -15,7 +15,7 @@ exports.getCurrentWeather = async (req, res, next) => {
     res.json({
       success: true,
       ...weather,
-      location: { lat: parseFloat(lat), lon: parseFloat(lon) }
+      location: weather.location || `${parseFloat(lat).toFixed(2)}, ${parseFloat(lon).toFixed(2)}`
     });
   } catch (error) {
     console.error('Weather controller error:', error);
@@ -38,12 +38,27 @@ exports.getForecast = async (req, res, next) => {
       });
     }
     
-    const forecast = await weatherService.getForecast(parseFloat(lat), parseFloat(lon));
+    const data = await weatherService.getForecast(parseFloat(lat), parseFloat(lon));
+    
+    if (data.forecast) {
+      return res.json({
+        success: true,
+        location: data.location || (data.city ? `${data.city}, ${data.country || 'IN'}` : `${parseFloat(lat).toFixed(2)}, ${parseFloat(lon).toFixed(2)}`),
+        city: data.city || null,
+        country: data.country || 'IN',
+        coordinates: data.coordinates || { lat: parseFloat(lat), lon: parseFloat(lon) },
+        current: data.current || (Array.isArray(data.forecast) ? data.forecast[0] : {}),
+        forecast: data.forecast
+      });
+    }
+
+    // Fallback if array was returned
+    const forecastArray = Array.isArray(data) ? data : [];
     res.json({
       success: true,
-      location: { lat: parseFloat(lat), lon: parseFloat(lon) },
-      current: forecast[0] || {},
-      forecast: forecast.slice(1) || []
+      location: `${parseFloat(lat).toFixed(2)}, ${parseFloat(lon).toFixed(2)}`,
+      current: forecastArray[0] || {},
+      forecast: forecastArray
     });
   } catch (error) {
     console.error('Forecast controller error:', error);

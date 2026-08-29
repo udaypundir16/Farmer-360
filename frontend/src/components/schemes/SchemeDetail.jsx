@@ -5,6 +5,7 @@ import { getSchemeById, applyToScheme } from '../../services/schemes.service';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { ExternalLink } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function SchemeDetail() {
@@ -89,10 +90,16 @@ export default function SchemeDetail() {
               <p>{new Date(scheme.deadline).toLocaleDateString()}</p>
             </div>
           )}
-          {scheme.official_link ? (
-            <div>
-              <a href={scheme.official_link} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
-                {t('schemes.official_link')}
+          {(scheme.news_link || scheme.official_link) ? (
+            <div className="pt-2">
+              <a
+                href={scheme.news_link || scheme.official_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 btn-primary py-2.5 px-5 rounded-agri text-sm font-medium shadow-sm hover:shadow"
+              >
+                <span>Read Full News Article / Official Guidelines</span>
+                <ExternalLink size={16} />
               </a>
             </div>
           ) : (

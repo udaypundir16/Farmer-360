@@ -6,13 +6,20 @@ import SchemeNews from '../components/schemes/SchemeNews';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import Loader from '../components/ui/loader';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Schemes() {
+  const { t } = useTranslation();
   const [schemes, setSchemes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ category: '', state: '', search: '' });
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0 });
+
+  // Reset page to 1 on filter change
+  useEffect(() => {
+    setPagination(prev => ({ ...prev, page: 1 }));
+  }, [filters.category, filters.state, filters.search]);
 
   useEffect(() => {
     loadSchemes();

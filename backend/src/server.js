@@ -18,7 +18,7 @@ const server = app.listen(PORT, () => {
   console.log(`✓ Server running on http://localhost:${PORT}`);
   console.log(`✓ Environment: ${NODE_ENV}`);
   startMonitor(); // Start the background job
-  // startMarketPriceService();
+  startMarketPriceService(); // Automatically fetch fresh mandi prices on startup and every 30 mins
 });
 
 // Graceful shutdown

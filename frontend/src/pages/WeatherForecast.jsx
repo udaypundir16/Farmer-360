@@ -3,9 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { getForecast } from '../services/weather.service';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer } from 'lucide-react';
+import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, MapPin, Navigation, RefreshCw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Loader from '../components/ui/loader';
+
+const POPULAR_LOCATIONS = [
+  { name: 'Current GPS Location', lat: null, lon: null },
+  { name: 'New Delhi (NCR)', lat: 28.6139, lon: 77.2090 },
+  { name: 'Ludhiana (Punjab)', lat: 30.9010, lon: 75.8573 },
+  { name: 'Karnal (Haryana)', lat: 29.6857, lon: 76.9905 },
+  { name: 'Pune (Maharashtra)', lat: 18.5204, lon: 73.8567 },
+  { name: 'Jaipur (Rajasthan)', lat: 26.9124, lon: 75.7873 },
+  { name: 'Patna (Bihar)', lat: 25.5941, lon: 85.1376 },
+  { name: 'Hyderabad (Telangana)', lat: 17.3850, lon: 78.4867 },
+  { name: 'Chennai (Tamil Nadu)', lat: 13.0827, lon: 80.2707 },
+];
 
 export default function WeatherForecast() {
   const { user } = useAuth();
@@ -14,58 +26,89 @@ export default function WeatherForecast() {
   const [loading, setLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
   const [coords, setCoords] = useState(null);
+  const [locationName, setLocationName] = useState('Detecting location...');
+  const [locationSource, setLocationSource] = useState('GPS');
   const [locationError, setLocationError] = useState(null);
 
   useEffect(() => {
-    const fetchByCoords = (lat, lon) => {
-      setCoords({ lat, lon });
-      loadForecast(lat, lon);
-    };
-
-    if (user?.latitude && user?.longitude) {
-      fetchByCoords(user.latitude, user.longitude);
-    } else if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          fetchByCoords(pos.coords.latitude, pos.coords.longitude);
-        },
-        err => {
-          console.warn('Geolocation error', err);
-          setLocationError(t('dashboard.location_permission_denied'));
-          setLoading(false);
-        }
-      );
-    } else {
-      setLocationError(t('dashboard.location_not_available'));
-      setLoading(false);
-    }
+    detectLocationAndFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const loadForecast = async (lat, lon) => {
+  const detectLocationAndFetch = () => {
+    if (user?.latitude && user?.longitude) {
+      setLocationSource('Profile');
+      setCoords({ lat: user.latitude, lon: user.longitude });
+      loadForecast(user.latitude, user.longitude, user.village ? `${user.village}${user.state ? ', ' + user.state : ''}` : null);
+    } else if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          setLocationSource('Live GPS');
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          setCoords({ lat, lon });
+          loadForecast(lat, lon);
+        },
+        err => {
+          console.warn('Geolocation error', err);
+          setLocationSource('Default (New Delhi)');
+          // Default fallback to New Delhi
+          const defaultLat = 28.6139;
+          const defaultLon = 77.2090;
+          setCoords({ lat: defaultLat, lon: defaultLon });
+          loadForecast(defaultLat, defaultLon, 'New Delhi, IN');
+        }
+      );
+    } else {
+      const defaultLat = 28.6139;
+      const defaultLon = 77.2090;
+      setCoords({ lat: defaultLat, lon: defaultLon });
+      loadForecast(defaultLat, defaultLon, 'New Delhi, IN');
+    }
+  };
+
+  const handleSelectLocation = (loc) => {
+    if (loc.lat === null) {
+      detectLocationAndFetch();
+    } else {
+      setLocationSource('Manual');
+      setCoords({ lat: loc.lat, lon: loc.lon });
+      loadForecast(loc.lat, loc.lon, loc.name);
+    }
+  };
+
+  const loadForecast = async (lat, lon, fallbackName = null) => {
     try {
       setLoading(true);
       const data = await getForecast(lat, lon);
-      const locationLabel = user?.village || 'Your Area';
+      
+      const resolvedLocation = data.location || fallbackName || (user?.village ? `${user.village}, ${user.state || 'IN'}` : 'Your Area');
+      setLocationName(resolvedLocation);
+
       if (data.forecast) {
         setForecast({
-          location: data.location || locationLabel,
-          current: data.current || {},
+          location: resolvedLocation,
+          current: data.current || (Array.isArray(data.forecast) ? data.forecast[0] : {}),
           forecast: data.forecast
         });
       } else if (Array.isArray(data)) {
         setForecast({
-          location: locationLabel,
+          location: resolvedLocation,
           current: data[0] || {},
-          forecast: data.slice(1)
+          forecast: data
         });
       } else {
-        setForecast(data);
+        setForecast({
+          ...data,
+          location: resolvedLocation
+        });
       }
     } catch (error) {
       console.error('Error loading forecast:', error);
+      const defaultLoc = fallbackName || 'New Delhi, IN';
+      setLocationName(defaultLoc);
       setForecast({
-        location: user?.village || 'Your Area',
+        location: defaultLoc,
         current: {
           temp: 28,
           condition: 'Partly Cloudy',
@@ -86,23 +129,16 @@ export default function WeatherForecast() {
     }
   };
 
-  const getWeatherIcon = (condition) => {
-    const cond = condition.toLowerCase();
+  const getWeatherIcon = (condition = '') => {
+    const cond = (condition || '').toLowerCase();
     if (cond.includes('rain')) return CloudRain;
     if (cond.includes('cloud')) return Cloud;
     return Sun;
   };
 
-  const getWeatherColor = (condition) => {
-    const cond = condition.toLowerCase();
-    if (cond.includes('rain')) return 'from-blue-500 to-indigo-600';
-    if (cond.includes('cloud')) return 'from-gray-400 to-gray-600';
-    return 'from-yellow-400 to-orange-500';
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-cream-50">
         <Loader />
       </div>
     );
@@ -125,84 +161,141 @@ export default function WeatherForecast() {
     );
   }
 
-  const selectedForecast = forecast.forecast[selectedDay];
+  const selectedForecast = (forecast?.forecast && forecast.forecast[selectedDay]) || forecast?.current || {};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8">
-      <div className="container mx-auto p-4">
-        <style>{`
-          @keyframes slideInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes fadeInStagger {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          .page-header { animation: slideInDown 0.6s ease-out; }
-          .weather-card { animation: fadeInStagger 0.5s ease-out; }
-          .forecast-day { transition: transform 0.2s; }
-          .forecast-day:hover { transform: scale(1.03); }
-          .forecast-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 1rem; }
-          @media (max-width: 768px) {
-            .forecast-grid { grid-template-columns: repeat(3,1fr); overflow-x: auto; }
-          }
-          .details-grid { grid-auto-rows: minmax(100px, auto); }
-        `}</style>
-        <div className="mb-8 page-header">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600">
-              <Cloud size={24} className="text-white" />
+      <div className="container mx-auto p-4 max-w-6xl">
+        {/* Page Header */}
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-agri">
+              <Cloud size={28} />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                🌤️ Weather Forecast
+              <h1 className="text-3xl md:text-4xl font-bold font-heading text-primary-900">
+                {t('weather.title', 'Weather Forecast')}
               </h1>
-              <p className="text-gray-600 text-lg">7-day weather forecast for {forecast.location}</p>
+              <p className="text-soil-light text-sm md:text-base">
+                Real-time agricultural weather & 5-day farming outlook
+              </p>
             </div>
+          </div>
+
+          {/* Quick Location Switcher */}
+          <div className="flex items-center gap-2 bg-white/80 backdrop-blur p-2 rounded-xl border border-primary-100 shadow-sm">
+            <MapPin size={18} className="text-primary-600 shrink-0" />
+            <select
+              onChange={(e) => {
+                const selected = POPULAR_LOCATIONS.find(l => l.name === e.target.value);
+                if (selected) handleSelectLocation(selected);
+              }}
+              className="bg-transparent text-sm font-medium text-soil focus:outline-none cursor-pointer pr-2"
+              defaultValue=""
+            >
+              <option value="" disabled>Switch Location / Region...</option>
+              {POPULAR_LOCATIONS.map((loc) => (
+                <option key={loc.name} value={loc.name}>
+                  {loc.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={detectLocationAndFetch}
+              title="Refresh GPS location"
+              className="p-1.5 hover:bg-primary-50 rounded-lg text-primary-700 transition-colors"
+            >
+              <RefreshCw size={16} />
+            </button>
           </div>
         </div>
 
-        {/* Current Weather */}
-        <Card className="mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-black weather-card">
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Location Banner Bar */}
+        <div className="mb-6 p-4 rounded-xl bg-white/90 border border-primary-100/80 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-semibold text-soil-light uppercase tracking-wider">Live Weather Station:</span>
+            <span className="text-base font-bold text-primary-900 flex items-center gap-1">
+              <MapPin size={16} className="text-primary-600" />
+              {locationName}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs text-soil-light">
+            {coords && (
+              <span className="bg-primary-50 px-2.5 py-1 rounded-md text-primary-800 font-mono font-medium border border-primary-100">
+                Lat: {coords.lat.toFixed(2)}°, Lon: {coords.lon.toFixed(2)}°
+              </span>
+            )}
+            <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium border border-blue-100">
+              Source: {locationSource}
+            </span>
+          </div>
+        </div>
+
+        {/* Current Weather Main Hero Card */}
+        <Card className="mb-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-primary-800 text-white shadow-agri-lg border-0 overflow-hidden relative">
+          <div className="absolute right-0 top-0 opacity-10 pointer-events-none translate-x-12 -translate-y-6">
+            <Sun size={240} />
+          </div>
+          <CardContent className="p-6 md:p-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
               <div>
-                <p className="mb-2 font-semibold">Current Weather</p>
-                <div className="flex items-center gap-4">
-                  <div className="text-6xl font-bold">{forecast.current.temp}°C</div>
+                <div className="flex items-center gap-2 text-blue-100 text-sm font-medium mb-1">
+                  <Navigation size={16} />
+                  <span>Current Conditions in {locationName}</span>
+                </div>
+                <div className="flex items-baseline gap-4 mt-2">
+                  <div className="text-5xl md:text-6xl font-extrabold tracking-tight">
+                    {forecast.current.temp ?? 28}°C
+                  </div>
                   <div>
-                    <p className="text-xl">{forecast.current.condition}</p>
-                    <p className="text-sm text-gray-800">{forecast.location}</p>
+                    <p className="text-xl font-semibold text-gold-300 capitalize">{forecast.current.condition || 'Clear'}</p>
+                    <p className="text-xs text-blue-100 capitalize">{forecast.current.description || 'Optimal agricultural conditions'}</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <Droplets size={24} />
+
+              <div className="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-white/20">
+                    <Droplets size={20} className="text-blue-200" />
+                  </div>
                   <div>
-                    <p className="text-sm text-black">Humidity</p>
-                    <p className="text-xl font-semibold">{forecast.current.humidity}%</p>
+                    <p className="text-xs text-blue-100">Humidity</p>
+                    <p className="text-lg font-bold">{forecast.current.humidity ?? 60}%</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Wind size={24} />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-white/20">
+                    <Wind size={20} className="text-blue-200" />
+                  </div>
                   <div>
-                    <p className="text-sm text-black">Wind</p>
-                    <p className="text-xl font-semibold">{forecast.current.windSpeed} km/h</p>
+                    <p className="text-xs text-blue-100">Wind Speed</p>
+                    <p className="text-lg font-bold">{forecast.current.windSpeed ?? 12} km/h</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Thermometer size={24} />
-                <div>
-                  <p className="text-sm text-black">Pressure</p>
-                  <p className="text-xl font-semibold">{forecast.current.pressure} hPa</p>
+
+              <div className="flex flex-col justify-center bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-white/20">
+                    <Thermometer size={20} className="text-yellow-200" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-blue-100">Atmospheric Pressure</p>
+                    <p className="text-lg font-bold">{forecast.current.pressure ?? 1013} hPa</p>
+                  </div>
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
+
 
         {/* Forecast Days */}
         <div className="forecast-grid grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">

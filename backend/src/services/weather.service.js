@@ -64,13 +64,19 @@ exports.getCurrentWeather = async (lat, lon) => {
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
       
       const response = await axios.get(url, { timeout: 5000 });
+      const locationName = response.data.name 
+        ? `${response.data.name}${response.data.sys?.country ? ', ' + response.data.sys.country : ''}`
+        : null;
+
       const data = {
+        location: locationName,
         temp: Math.round(response.data.main.temp),
         condition: response.data.weather[0].main,
         description: response.data.weather[0].description,
         humidity: response.data.main.humidity,
         windSpeed: Math.round(response.data.wind.speed * 3.6), // Convert m/s to km/h
         pressure: response.data.main.pressure,
+        coordinates: { lat: parseFloat(lat), lon: parseFloat(lon) }
       };
       
       // Cache the result
@@ -89,7 +95,7 @@ exports.getCurrentWeather = async (lat, lon) => {
 
   // Use mock data if API is not available or fails
   console.log('⚠ Using mock weather data (OpenWeather API not configured or failed)');
-  const mockData = getMockWeather(lat, lon);
+  const mockData = { ...getMockWeather(lat, lon), location: 'Local Area, IN', coordinates: { lat: parseFloat(lat), lon: parseFloat(lon) } };
   
   // Cache mock data for shorter duration
   try {
@@ -126,6 +132,10 @@ exports.getForecast = async (lat, lon) => {
       
       const response = await axios.get(url, { timeout: 5000 });
       
+      const locationName = response.data.city?.name
+        ? `${response.data.city.name}${response.data.city.country ? ', ' + response.data.city.country : ''}`
+        : null;
+
       // Group forecast by day (OpenWeather returns 3-hour intervals)
       const dailyForecast = {};
       response.data.list.forEach(item => {
@@ -147,7 +157,7 @@ exports.getForecast = async (lat, lon) => {
       });
       
       // Convert to array and take first 5 days
-      const forecast = Object.values(dailyForecast).slice(0, 5).map((day, idx) => ({
+      const forecastArray = Object.values(dailyForecast).slice(0, 5).map((day, idx) => ({
         day: idx === 0 ? 'Today' : idx === 1 ? 'Tomorrow' : `Day ${idx + 1}`,
         temp: Math.round(day.temp),
         condition: day.condition,
@@ -155,15 +165,24 @@ exports.getForecast = async (lat, lon) => {
         windSpeed: day.windSpeed,
         rainChance: day.rainChance,
       }));
+
+      const result = {
+        location: locationName || 'Detected Location',
+        city: response.data.city?.name || 'Local Area',
+        country: response.data.city?.country || 'IN',
+        coordinates: { lat: parseFloat(lat), lon: parseFloat(lon) },
+        current: forecastArray[0] || {},
+        forecast: forecastArray
+      };
       
       // Cache the result
       try {
-        await cache.set(cacheKey, forecast, 3600); // 1 hour
+        await cache.set(cacheKey, result, 3600); // 1 hour
       } catch (error) {
         console.warn('Cache set error:', error.message);
       }
       
-      return forecast;
+      return result;
     } catch (error) {
       console.error('OpenWeather Forecast API Error:', error.message);
       // Fall through to mock data
@@ -173,13 +192,21 @@ exports.getForecast = async (lat, lon) => {
   // Use mock data if API is not available or fails
   console.log('⚠ Using mock forecast data (OpenWeather API not configured or failed)');
   const mockForecast = getMockForecast(lat, lon);
+  const fallbackResult = {
+    location: 'Local Area, IN',
+    city: 'Local Area',
+    country: 'IN',
+    coordinates: { lat: parseFloat(lat), lon: parseFloat(lon) },
+    current: mockForecast[0] || {},
+    forecast: mockForecast
+  };
   
   // Cache mock data for shorter duration
   try {
-    await cache.set(cacheKey, mockForecast, 300); // 5 minutes for mock data
+    await cache.set(cacheKey, fallbackResult, 300); // 5 minutes for mock data
   } catch (error) {
     // Ignore cache errors
   }
   
-  return mockForecast;
+  return fallbackResult;
 };

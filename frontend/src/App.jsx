@@ -12,7 +12,6 @@ import AdminLogin from './pages/AdminLogin';
 import Register from './pages/Register';
 import SearchResults from './pages/SearchResults';
 import AdminDashboard from './pages/AdminDashboard';
-import SchemeDetail from './components/schemes/SchemeDetail';
 import CropCalendar from './pages/CropCalendar';
 import MarketTrends from './pages/MarketTrends';
 import WeatherForecast from './pages/WeatherForecast';
@@ -49,7 +48,6 @@ function AppContent() {
           <Route index element={<Dashboard />} />
           <Route path="markets" element={<Markets />} />
           <Route path="schemes" element={<Schemes />} />
-          <Route path="schemes/:id" element={<SchemeDetail />} />
           <Route path="ai-chat" element={<AIChat />} />
           <Route path="alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
           <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

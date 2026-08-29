@@ -6,19 +6,16 @@ import QuickActions from '../components/ai/QuickActions';
 import { MessageCircle, Bot } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function AIChat() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const prevLengthRef = useRef(0);
-
-  if (!user) {  
-    
-    return <Navigate to="/login" replace />;
-  }
 
   useEffect(() => {
     const saved = localStorage.getItem('chatHistory');
@@ -43,14 +40,23 @@ export default function AIChat() {
     prevLengthRef.current = messages.length;
   }, [messages]);
 
+  if (authLoading) {
+    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   const handleSend = async (text) => {
     if (!text.trim()) return;
     const userMessage = { role: 'user', content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
-    setLoading(true);
+    setSending(true);
 
     try {
-      const response = await sendMessage(text);
+      const currentLang = i18n.language || 'en';
+      const response = await sendMessage(text, currentLang);
       const reply = response.reply || response.message || response;
       const aiMessage = {
         role: 'assistant',
@@ -60,18 +66,11 @@ export default function AIChat() {
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('AI Chat error:', error);
-      let errorMessage = 'Sorry, I encountered an error. ';
-      if (error.response?.status === 401) {
-        errorMessage += 'Please log in to use the AI chat feature.';
-      } else if (error.response?.status === 429) {
-        errorMessage += 'Too many requests. Please wait a moment and try again.';
-      } else {
-        errorMessage += 'Please try again or check your connection.';
-      }
+      let errorMessage = t('ai_chat.error_message');
       const errorMsg = { role: 'assistant', content: errorMessage, timestamp: new Date() };
       setMessages(prev => [...prev, errorMsg]);
     } finally {
-      setLoading(false);
+      setSending(false);
     }
   };
 
@@ -90,9 +89,9 @@ export default function AIChat() {
             </div>
             <div>
               <h1 className="font-heading text-3xl md:text-4xl font-bold text-primary-800">
-                AI Farming Assistant
+                {t('ai_chat.title')}
               </h1>
-              <p className="text-soil-light text-center md:text-left">Ask anything about farming, crops, weather & schemes</p>
+              <p className="text-soil-light text-center md:text-left">{t('ai_chat.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -105,9 +104,8 @@ export default function AIChat() {
                   <MessageCircle size={48} className="text-primary-600" />
                 </div>
                 <p className="text-lg text-soil mb-6 max-w-md font-medium leading-relaxed">
-                  Welcome! I'm your AI farming assistant. Ask me anything about farming, crops, weather, or government schemes.
+                  {t('ai_chat.welcome_message')}
                 </p>
-                <p className="text-sm text-soil-light mb-4">Click a quick action or type your question</p>
                 <QuickActions onSelect={handleSend} />
               </div>
             ) : (
@@ -117,7 +115,7 @@ export default function AIChat() {
                     <ChatMessage message={msg} />
                   </div>
                 ))}
-                {loading && (
+                {sending && (
                   <div className="flex justify-start">
                     <div className="rounded-2xl px-4 py-3 max-w-xs bg-white border border-primary-100 shadow-agri">
                       <div className="flex gap-2">
@@ -134,7 +132,7 @@ export default function AIChat() {
           </div>
 
           <div className="border-t border-primary-100 bg-white/80 backdrop-blur-md p-4">
-            <ChatInput onSend={handleSend} disabled={loading} />
+            <ChatInput onSend={handleSend} disabled={sending} />
           </div>
         </div>
       </div>

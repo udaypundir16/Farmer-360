@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Mic, MicOff, X, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { sendVoiceMessage } from '../../services/ai.service';
 
@@ -52,6 +53,7 @@ function audioBufferToWavBlob(buffer) {
 
 export default function VoiceAssistant() {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [recording, setRecording] = useState(false);
   const [canStop, setCanStop] = useState(false);
@@ -76,7 +78,7 @@ export default function VoiceAssistant() {
         stream.getTracks().forEach((t) => t.stop());
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
         if (blob.size < 2000) {
-          setError('Recording too short. Speak for 2–3 seconds then tap Stop.');
+          setError(t('voice.recording_too_short'));
           return;
         }
         let base64;
@@ -102,20 +104,21 @@ export default function VoiceAssistant() {
           });
         }
         if (!base64) {
-          setError('Could not read recording');
+          setError(t('voice.voice_error'));
           return;
         }
         setLoading(true);
         setError('');
         try {
-          const data = await sendVoiceMessage(base64, contentType);
+          const currentLang = i18n.language || 'en';
+          const data = await sendVoiceMessage(base64, contentType, currentLang);
           setResult(data);
           if (data.audioBase64) {
             const audio = new Audio(`data:audio/wav;base64,${data.audioBase64}`);
             audio.play().catch(() => {});
           }
         } catch (err) {
-          setError(err.response?.data?.message || err.message || 'Voice request failed');
+          setError(err.response?.data?.message || err.message || t('voice.voice_error'));
         } finally {
           setLoading(false);
         }
@@ -126,9 +129,9 @@ export default function VoiceAssistant() {
       setCanStop(false);
       minRecordTimerRef.current = setTimeout(() => setCanStop(true), 2000);
     } catch (err) {
-      setError('Microphone access denied or unavailable');
+      setError(t('voice.mic_permission_denied'));
     }
-  }, []);
+  }, [i18n.language, t]);
 
   const stopRecording = useCallback(() => {
     if (minRecordTimerRef.current) {
@@ -161,7 +164,7 @@ export default function VoiceAssistant() {
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-80 rounded-agri-lg border border-primary-100 bg-white shadow-agri-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <div className="flex items-center justify-between px-4 py-3 border-b border-primary-100 bg-primary-50/50">
-            <span className="font-heading font-semibold text-bright-heading">Voice Assistant</span>
+            <span className="font-heading font-semibold text-bright-heading">{t('voice.voice_assistant')}</span>
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -181,13 +184,13 @@ export default function VoiceAssistant() {
               <div className="space-y-2 text-sm">
                 {result.transcript && (
                   <p className="text-bright-muted">
-                    <span className="font-semibold text-bright-body">You: </span>
+                    <span className="font-semibold text-bright-body">{t('profile.title')}: </span>
                     {result.transcript}
                   </p>
                 )}
                 {result.reply && (
                   <p className="text-bright-body">
-                    <span className="font-semibold text-primary-600">Assistant: </span>
+                    <span className="font-semibold text-primary-600">AI: </span>
                     {result.reply}
                   </p>
                 )}
@@ -197,7 +200,7 @@ export default function VoiceAssistant() {
               {loading ? (
                 <div className="flex items-center gap-2 text-bright-muted">
                   <Loader2 size={24} className="animate-spin" />
-                  <span>Processing...</span>
+                  <span>{t('voice.processing')}</span>
                 </div>
               ) : recording ? (
                 <button
@@ -207,7 +210,7 @@ export default function VoiceAssistant() {
                   className={`flex items-center gap-2 px-6 py-3 rounded-agri-lg font-semibold transition-colors ${canStop ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                 >
                   <MicOff size={20} />
-                  {canStop ? 'Stop & send' : 'Speak... (2s)'}
+                  {canStop ? t('voice.stop_recording') : `${t('voice.listening')}...`}
                 </button>
               ) : (
                 <button
@@ -216,12 +219,12 @@ export default function VoiceAssistant() {
                   className="flex items-center gap-2 px-6 py-3 rounded-agri-lg bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold shadow-agri hover:shadow-agri-lg transition-all"
                 >
                   <Mic size={20} />
-                  Tap to speak
+                  {t('voice.start_recording')}
                 </button>
               )}
             </div>
             <p className="text-xs text-bright-muted text-center">
-              Speak clearly for 2–3 seconds, then tap Stop. Ask about crops, weather, or schemes.
+              {t('voice.speak_prompt')}
             </p>
           </div>
         </div>

@@ -1,14 +1,26 @@
 const { supabase } = require('../config/database');
 
-exports.getAllSchemes = async ({ page, limit, category, state, search }) => {
+exports.getAllSchemes = async ({ page = 1, limit = 10, category, state, search }) => {
   let query = supabase.from('schemes').select('*', { count: 'exact' });
 
-  if (category) query = query.eq('category', category);
-  if (state) query = query.eq('state_specific', state);
-  if (search) query = query.ilike('name', `%${search}%`); // or use full-text search
+  if (category && category !== 'all') {
+    query = query.eq('category', category.toLowerCase());
+  }
 
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
+  if (state && state !== 'all') {
+    // Show schemes specific to this state as well as national 'All India' schemes
+    query = query.or(`state_specific.ilike.%${state}%,state_specific.eq.All India,name.ilike.%${state}%,description.ilike.%${state}%`);
+  }
+
+  if (search && search.trim()) {
+    const s = search.trim();
+    query = query.or(`name.ilike.%${s}%,description.ilike.%${s}%,category.ilike.%${s}%`);
+  }
+
+  const p = parseInt(page) || 1;
+  const l = parseInt(limit) || 10;
+  const from = (p - 1) * l;
+  const to = from + l - 1;
   query = query.range(from, to).order('created_at', { ascending: false });
 
   const { data, error, count } = await query;
@@ -17,10 +29,10 @@ exports.getAllSchemes = async ({ page, limit, category, state, search }) => {
   return {
     data,
     pagination: {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      total: count,
-      pages: Math.ceil(count / limit)
+      page: p,
+      limit: l,
+      total: count || 0,
+      pages: Math.ceil((count || 0) / l)
     }
   };
 };

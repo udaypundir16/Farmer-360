@@ -3,6 +3,7 @@ import { MessageSquare, Search, Plus, Heart, MessageCircle, Eye } from 'lucide-r
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { useTranslation } from 'react-i18next';
+import api from '../services/api';
 
 export default function CommunityForum() {
   const { t } = useTranslation();
@@ -32,21 +33,21 @@ export default function CommunityForum() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (selectedCrop) params.append('cropTag', selectedCrop);
-      if (searchTerm) params.append('search', searchTerm);
+      const params = {};
+      if (selectedCrop) params.cropTag = selectedCrop;
+      if (searchTerm) params.search = searchTerm;
 
-      const response = await fetch(`http://localhost:5000/api/v1/forum/posts?${params}`);
-      const data = await response.json();
+      const response = await api.get('/forum/posts', { params });
+      const data = response.data;
 
       if (data.success) {
         setPosts(data.data);
         setError('');
       } else {
-        setError('Failed to fetch posts');
+        setError(t('common.error'));
       }
     } catch (err) {
-      setError('Error connecting to server');
+      setError(t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -56,12 +57,12 @@ export default function CommunityForum() {
   const fetchMetadata = async () => {
     try {
       const [tagsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/v1/forum/crop-tags'),
-        fetch('http://localhost:5000/api/v1/forum/stats'),
+        api.get('/forum/crop-tags'),
+        api.get('/forum/stats'),
       ]);
 
-      const tagsData = await tagsRes.json();
-      const statsData = await statsRes.json();
+      const tagsData = tagsRes.data;
+      const statsData = statsRes.data;
 
       if (tagsData.success) setCropTags(tagsData.data);
       if (statsData.success) setStats(statsData.data);
@@ -81,13 +82,8 @@ export default function CommunityForum() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/forum/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
+      const response = await api.post('/forum/posts', formData);
+      const data = response.data;
 
       if (data.success) {
         setPosts([data.data, ...posts]);
@@ -95,10 +91,10 @@ export default function CommunityForum() {
         setShowCreateForm(false);
         setError('');
       } else {
-        setError(data.message || 'Failed to create post');
+        setError(data.message || t('common.error'));
       }
     } catch (err) {
-      setError('Error creating post');
+      setError(t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -110,13 +106,8 @@ export default function CommunityForum() {
     if (!replyData.content.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/forum/posts/${postId}/replies`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(replyData),
-      });
-
-      const data = await response.json();
+      const response = await api.post(`/forum/posts/${postId}/replies`, replyData);
+      const data = response.data;
 
       if (data.success) {
         setSelectedPost(data.data);
@@ -124,20 +115,15 @@ export default function CommunityForum() {
         setReplyData({ content: '', authorName: '' });
       }
     } catch (err) {
-      setError('Error adding reply');
+      setError(t('common.error'));
     }
   };
 
   // Handle like post
   const handleLikePost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/forum/posts/${postId}/like`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'user-' + Math.random() }),
-      });
-
-      const data = await response.json();
+      const response = await api.post(`/forum/posts/${postId}/like`, { userId: 'user-' + Math.random() });
+      const data = response.data;
       if (data.success) {
         setPosts(posts.map((p) => (p.id === postId ? data.data : p)));
         if (selectedPost?.id === postId) {
@@ -167,7 +153,7 @@ export default function CommunityForum() {
             onClick={() => setSelectedPost(null)}
             className="mb-6 px-4 py-2 bg-primary-600 text-white rounded-agri hover:bg-primary-700"
           >
-            ← Back to Posts
+            ← {t('common.back')}
           </Button>
 
           <Card className="bg-white/95 border-primary-100 shadow-agri">
@@ -179,7 +165,7 @@ export default function CommunityForum() {
                     <span className="font-semibold text-primary-600">{selectedPost.authorName}</span>
                     <span>{formatDate(selectedPost.createdAt)}</span>
                     <span className="flex items-center gap-1">
-                      <Eye size={14} /> {selectedPost.viewCount} views
+                      <Eye size={14} /> {selectedPost.viewCount} {t('forum.views')}
                     </span>
                   </div>
                 </div>
@@ -203,16 +189,16 @@ export default function CommunityForum() {
                 </button>
                 <div className="flex items-center gap-2 text-soil-light">
                   <MessageCircle size={18} />
-                  <span>{selectedPost.replies.length} replies</span>
+                  <span>{selectedPost.replies.length} {t('forum.replies')}</span>
                 </div>
               </div>
 
               {/* Replies Section */}
               <div className="border-t border-primary-100 pt-6">
-                <h3 className="font-heading text-lg font-bold mb-4">Replies ({selectedPost.replies.length})</h3>
+                <h3 className="font-heading text-lg font-bold mb-4">{t('forum.replies')} ({selectedPost.replies.length})</h3>
 
                 {selectedPost.replies.length === 0 ? (
-                  <p className="text-soil-light text-center py-8">No replies yet. Be the first to respond!</p>
+                  <p className="text-soil-light text-center py-8">{t('forum.no_discussions')}</p>
                 ) : (
                   <div className="space-y-4 mb-6">
                     {selectedPost.replies.map((reply) => (
@@ -237,14 +223,14 @@ export default function CommunityForum() {
                   <div>
                     <input
                       type="text"
-                      placeholder="Your name (optional)"
+                      placeholder={t('forum.enter_name')}
                       value={replyData.authorName}
                       onChange={(e) => setReplyData({ ...replyData, authorName: e.target.value })}
                       className="w-full px-3 py-2 border border-primary-200 rounded-agri focus:outline-none focus:border-primary-500"
                     />
                   </div>
                   <textarea
-                    placeholder="Write your reply..."
+                    placeholder={t('forum.reply_placeholder')}
                     rows="3"
                     value={replyData.content}
                     onChange={(e) => setReplyData({ ...replyData, content: e.target.value })}
@@ -255,7 +241,7 @@ export default function CommunityForum() {
                     disabled={loading}
                     className="w-full bg-primary-600 text-white py-2 rounded-agri hover:bg-primary-700"
                   >
-                    Add Reply
+                    {t('forum.post_reply')}
                   </Button>
                 </form>
               </div>
@@ -274,9 +260,9 @@ export default function CommunityForum() {
           <div className="inline-block px-6 py-3 rounded-agri-lg bg-white/80 backdrop-blur-sm border border-primary-100 shadow-agri">
             <h1 className="font-heading text-3xl font-bold text-primary-800 flex items-center gap-3">
               <MessageSquare className="text-primary-600" size={32} />
-              Community Forum
+              {t('forum.title')}
             </h1>
-            <p className="text-soil-light mt-2">Share knowledge, ask questions, and connect with farmers</p>
+            <p className="text-soil-light mt-2">{t('forum.subtitle')}</p>
           </div>
         </div>
 
@@ -285,25 +271,25 @@ export default function CommunityForum() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <Card className="bg-gradient-to-br from-primary-50 to-primary-100/50 border-primary-200">
               <CardContent className="pt-6">
-                <p className="text-soil-light text-sm mb-1">Total Posts</p>
+                <p className="text-soil-light text-sm mb-1">{t('forum.all_topics')}</p>
                 <p className="text-2xl font-bold text-primary-700">{stats.totalPosts}</p>
               </CardContent>
             </Card>
             <Card className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
               <CardContent className="pt-6">
-                <p className="text-soil-light text-sm mb-1">Replies</p>
+                <p className="text-soil-light text-sm mb-1">{t('forum.replies')}</p>
                 <p className="text-2xl font-bold text-green-700">{stats.totalReplies}</p>
               </CardContent>
             </Card>
             <Card className="bg-gradient-to-br from-red-50 to-red-100/50 border-red-200">
               <CardContent className="pt-6">
-                <p className="text-soil-light text-sm mb-1">Likes</p>
+                <p className="text-soil-light text-sm mb-1">{t('forum.likes')}</p>
                 <p className="text-2xl font-bold text-red-700">{stats.totalLikes}</p>
               </CardContent>
             </Card>
             <Card className="bg-gradient-to-br from-gold-50 to-gold-100/50 border-gold-200">
               <CardContent className="pt-6">
-                <p className="text-soil-light text-sm mb-1">Active Crops</p>
+                <p className="text-soil-light text-sm mb-1">{t('crop_market.crop_name')}</p>
                 <p className="text-2xl font-bold text-gold-700">{stats.activeCropTags}</p>
               </CardContent>
             </Card>
@@ -316,7 +302,7 @@ export default function CommunityForum() {
             <Search className="absolute left-3 top-3 text-soil-light" size={20} />
             <input
               type="text"
-              placeholder="Search discussions..."
+              placeholder={t('forum.search_discussions')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-primary-200 rounded-agri bg-white focus:outline-none focus:border-primary-500"
@@ -327,7 +313,7 @@ export default function CommunityForum() {
             onChange={(e) => setSelectedCrop(e.target.value)}
             className="px-4 py-2 border border-primary-200 rounded-agri bg-white focus:outline-none focus:border-primary-500"
           >
-            <option value="">All Crops</option>
+            <option value="">{t('cropcalendar.all_crops')}</option>
             {cropTags.map((crop) => (
               <option key={crop} value={crop}>
                 {crop}
@@ -339,7 +325,7 @@ export default function CommunityForum() {
             className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-agri hover:bg-primary-700"
           >
             <Plus size={20} />
-            New Post
+            {t('forum.ask_question')}
           </Button>
         </div>
 
@@ -347,30 +333,30 @@ export default function CommunityForum() {
         {showCreateForm && (
           <Card className="bg-white/95 border-primary-100 shadow-agri mb-6">
             <CardHeader>
-              <CardTitle>Create a New Discussion</CardTitle>
+              <CardTitle>{t('forum.ask_question')}</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleCreatePost} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-soil mb-2">Title</label>
+                  <label className="block text-sm font-semibold text-soil mb-2">{t('forum.question_title')}</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="e.g., Best practices for wheat cultivation"
+                    placeholder={t('forum.enter_title')}
                     className="w-full px-4 py-2 border border-primary-200 rounded-agri focus:outline-none focus:border-primary-500"
                   />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-soil mb-2">Crop Type</label>
+                    <label className="block text-sm font-semibold text-soil mb-2">{t('forum.crop_tag')}</label>
                     <select
                       value={formData.cropTag}
                       onChange={(e) => setFormData({ ...formData, cropTag: e.target.value })}
                       className="w-full px-4 py-2 border border-primary-200 rounded-agri focus:outline-none focus:border-primary-500"
                     >
-                      <option value="">Select a crop</option>
+                      <option value="">{t('forum.select_tag')}</option>
                       {['Wheat', 'Rice', 'Cotton', 'Corn', 'Sugarcane', 'Potato', 'Tomato'].map((crop) => (
                         <option key={crop} value={crop}>
                           {crop}
@@ -380,23 +366,23 @@ export default function CommunityForum() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-soil mb-2">Your Name (optional)</label>
+                    <label className="block text-sm font-semibold text-soil mb-2">{t('forum.your_name')}</label>
                     <input
                       type="text"
                       value={formData.authorName}
                       onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
-                      placeholder="e.g., Farmer Name"
+                      placeholder={t('forum.enter_name')}
                       className="w-full px-4 py-2 border border-primary-200 rounded-agri focus:outline-none focus:border-primary-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-soil mb-2">Description</label>
+                  <label className="block text-sm font-semibold text-soil mb-2">{t('forum.description')}</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Share your question, experience, or tip..."
+                    placeholder={t('forum.enter_description')}
                     rows="5"
                     className="w-full px-4 py-2 border border-primary-200 rounded-agri focus:outline-none focus:border-primary-500"
                   />
@@ -414,14 +400,14 @@ export default function CommunityForum() {
                     disabled={loading}
                     className="flex-1 bg-primary-600 text-white py-2 rounded-agri hover:bg-primary-700"
                   >
-                    {loading ? 'Creating...' : 'Create Post'}
+                    {loading ? t('common.loading') : t('forum.post_btn')}
                   </Button>
                   <Button
                     type="button"
                     onClick={() => setShowCreateForm(false)}
                     className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-agri hover:bg-gray-400"
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </Button>
                 </div>
               </form>
@@ -433,13 +419,13 @@ export default function CommunityForum() {
         <div className="space-y-4">
           {loading ? (
             <div className="text-center py-8">
-              <p className="text-soil-light">Loading posts...</p>
+              <p className="text-soil-light">{t('common.loading')}</p>
             </div>
           ) : posts.length === 0 ? (
             <Card className="bg-white/95 border-primary-100">
               <CardContent className="py-16 text-center">
                 <MessageSquare className="mx-auto text-primary-300 mb-4" size={48} />
-                <p className="text-soil-light">No posts yet. Be the first to start a discussion!</p>
+                <p className="text-soil-light">{t('forum.no_discussions')}</p>
               </CardContent>
             </Card>
           ) : (
@@ -473,7 +459,7 @@ export default function CommunityForum() {
                       }}
                       className="flex items-center gap-1 hover:text-primary-600 transition"
                     >
-                      <MessageSquare size={16} /> Reply
+                      <MessageSquare size={16} /> {t('forum.post_reply')}
                     </button>
                     <span className="flex items-center gap-1">
                       <MessageCircle size={16} /> {post.replies.length}
