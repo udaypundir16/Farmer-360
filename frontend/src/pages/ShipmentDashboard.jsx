@@ -34,7 +34,7 @@ const ShipmentDashboard = () => {
   const [submitting, setSubmitting] = useState(false);
 
   // API base URL
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5004/api/v1';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://smart-agri-production.up.railway.app/api/v1';
   const authToken = localStorage.getItem('token');
 
   /**
@@ -308,35 +308,35 @@ const ShipmentDashboard = () => {
             <p className="text-gray-600 text-sm font-medium">{t('shipments.status_delivered')}</p>
             <p className="text-3xl font-bold text-green-600">{stats.delivered}</p>
           </div>
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-lg shadow p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
+          {/* Search and Filter Section */}
+          <div className="bg-white rounded-lg shadow p-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+              </div>
 
-            {/* Status Filter */}
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            >
-              <option value="all">{t('forum.all_topics')}</option>
-              <option value="created">{t('shipments.create_shipment')}</option>
-              <option value="picked_up">{t('shipments.status_dispatched')}</option>
-              <option value="in_transit">{t('shipments.status_in_transit')}</option>
-              <option value="delivered">{t('shipments.status_delivered')}</option>
-            </select>
+              {/* Status Filter */}
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              >
+                <option value="all">{t('forum.all_topics')}</option>
+                <option value="created">{t('shipments.create_shipment')}</option>
+                <option value="picked_up">{t('shipments.status_dispatched')}</option>
+                <option value="in_transit">{t('shipments.status_in_transit')}</option>
+                <option value="delivered">{t('shipments.status_delivered')}</option>
+              </select>
+            </div>
           </div>
-        </div>
           <p className="text-sm text-gray-600">
             {filteredShipments.length} / {shipments.length} {t('shipments.title')}
           </p>
