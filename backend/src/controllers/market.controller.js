@@ -11,9 +11,9 @@ exports.getLatestPrices = async (req, res, next) => {
 
 exports.getPriceHistory = async (req, res, next) => {
   try {
-    const { commodity, market } = req.query;
-    if (!commodity || !market) return res.status(400).json({ message: 'Commodity and market required' });
-    const history = await marketService.getPriceHistory(commodity, market, req.query.days);
+    const { commodity, market, days } = req.query;
+    if (!commodity) return res.status(400).json({ message: 'Commodity required' });
+    const history = await marketService.getPriceHistory(commodity, market, days || 30);
     res.json(history);
   } catch (error) {
     next(error);

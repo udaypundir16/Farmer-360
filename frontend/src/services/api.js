@@ -28,6 +28,7 @@ api.interceptors.response.use(
       const isAuthPage = typeof window !== 'undefined' && (window.location.pathname === '/login' || window.location.pathname === '/register');
       if (!isAuthUrl && !isAuthPage) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         window.location.href = '/login';
       }
     }

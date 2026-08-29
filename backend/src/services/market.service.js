@@ -24,23 +24,29 @@ exports.getLatestPrices = async (filters = {}) => {
   return data;
 };
 
-// Get price history for a specific commodity and market
+// Get price history for a specific commodity and optional market
 exports.getPriceHistory = async (commodity, market, days = 30) => {
-  const cacheKey = `price_history_${commodity}_${market}_${days}`;
+  const cacheKey = `price_history_${commodity}_${market || 'all'}_${days}`;
   const cached = await cache.get(cacheKey);
   if (cached) return cached;
 
   const startDate = new Date();
-  startDate.setDate(startDate.getDate() - days);
+  startDate.setDate(startDate.getDate() - Number(days));
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('market_prices')
     .select('*')
-    .eq('commodity', commodity)
-    .eq('market', market)
+    .eq('commodity', commodity);
+
+  if (market) {
+    query = query.eq('market', market);
+  }
+
+  query = query
     .gte('price_date', startDate.toISOString().split('T')[0])
     .order('price_date', { ascending: true });
 
+  const { data, error } = await query;
   if (error) throw error;
 
   await cache.set(cacheKey, data, 3600); // Cache for 1 hour

@@ -6,7 +6,7 @@ exports.getProfile = async (req, res, next) => {
     const userId = req.user.userId;
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, phone, full_name, email, village, district, state, crops_grown, language_pref, latitude, longitude')
+      .select('id, phone, full_name, email, village, district, state, crops_grown, language_pref, latitude, longitude, is_admin')
       .eq('id', userId)
       .single();
 
@@ -26,7 +26,8 @@ exports.getProfile = async (req, res, next) => {
         cropsGrown: user.crops_grown,
         languagePref: user.language_pref,
         latitude: user.latitude,
-        longitude: user.longitude
+        longitude: user.longitude,
+        isAdmin: user.is_admin || false
       }
     });
   } catch (error) {

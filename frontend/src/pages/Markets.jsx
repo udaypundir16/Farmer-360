@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getLatestPrices } from '../services/market.service';
 import PriceCard from '../components/market/PriceCard';
 import PriceChart from '../components/market/PriceChart';
@@ -9,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function Markets() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [prices, setPrices] = useState([]);
   const [filteredPrices, setFilteredPrices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -130,19 +132,16 @@ export default function Markets() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPrices.map((price, idx) => (
               <div
-                key={price.id}
+                key={price.id || idx}
                 className="animate-fade-in-up"
                 style={{ animationDelay: `${Math.min(idx * 0.05, 0.3)}s`, animationFillMode: 'both' }}
               >
-                <div
+                <PriceCard
+                  price={price}
                   onClick={() => {
-                    setSelectedCommodity(price.commodity);
-                    setSelectedMarket(price.market);
+                    navigate(`/market-trends?commodity=${encodeURIComponent(price.commodity)}&market=${encodeURIComponent(price.market || '')}`);
                   }}
-                  className="cursor-pointer"
-                >
-                  <PriceCard price={price} />
-                </div>
+                />
               </div>
             ))}
           </div>

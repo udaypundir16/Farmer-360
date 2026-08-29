@@ -6,19 +6,35 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Verify token by fetching user profile
+      // Verify token in background and update user profile
       api.get('/users/profile')
         .then(response => {
-          setUser(response.data.user);
+          if (response.data?.user) {
+            setUser(response.data.user);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          }
         })
-        .catch(() => {
-          localStorage.removeItem('token');
+        .catch((error) => {
+          // Only clear session if token is explicitly invalid or expired
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setUser(null);
+          }
+          // On network errors or server hiccups, preserve existing cached session
         })
         .finally(() => setLoading(false));
     } else {
@@ -28,30 +44,36 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (phone, password) => {
     const response = await api.post('/auth/login', { phone, password });
-    const { token, user } = response.data;
+    const { token, user: loggedInUser } = response.data;
     localStorage.setItem('token', token);
-    setUser(user);
-    return user;
+    localStorage.setItem('user', JSON.stringify(loggedInUser));
+    setUser(loggedInUser);
+    return loggedInUser;
   };
 
   const register = async (userData) => {
     const response = await api.post('/auth/register', userData);
-    const { token, user } = response.data;
+    const { token, user: registeredUser } = response.data;
     localStorage.setItem('token', token);
-    setUser(user);
-    return user;
+    localStorage.setItem('user', JSON.stringify(registeredUser));
+    setUser(registeredUser);
+    return registeredUser;
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 
   const refreshUser = async () => {
     try {
       const response = await api.get('/users/profile');
-      setUser(response.data.user);
-      return response.data.user;
+      if (response.data?.user) {
+        setUser(response.data.user);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        return response.data.user;
+      }
     } catch (error) {
       console.error('Failed to refresh user:', error);
     }
