@@ -41,7 +41,7 @@ export default function Login() {
             </div>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
-            Smart Agri
+            Farmer-360
           </h1>
           <p className="text-gray-600 text-sm">Intelligent Farming Platform</p>
         </div>
@@ -141,7 +141,7 @@ export default function Login() {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">New to Smart Agri?</span>
+              <span className="px-2 bg-white text-gray-500">New to Farmer-360?</span>
             </div>
           </div>
 

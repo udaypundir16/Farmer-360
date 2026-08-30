@@ -50,7 +50,7 @@ export default function AdminLogin() {
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent mb-2">
             Admin Portal
           </h1>
-          <p className="text-gray-600 text-sm">Smart Agri Admin Management</p>
+          <p className="text-gray-600 text-sm">Farmer-360 Admin Management</p>
         </div>
 
         {/* Form Section */}

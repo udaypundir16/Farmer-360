@@ -84,7 +84,7 @@ export default function AIChat() {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       {/* Very faint crop pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.04] bg-cover bg-center"

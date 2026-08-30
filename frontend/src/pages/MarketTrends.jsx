@@ -43,8 +43,16 @@ export default function MarketTrends() {
 
   // Load all commodity trends on mount
   useEffect(() => {
+    window.scrollTo(0, 0);
     loadTrends();
   }, []);
+
+  // Scroll to top of graph page whenever selected commodity changes
+  useEffect(() => {
+    if (selectedCommodity) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedCommodity]);
 
   const loadTrends = async () => {
     try {
@@ -82,6 +90,7 @@ export default function MarketTrends() {
       if (match) {
         setSelectedCommodity(match.commodity);
         setSelectedMarket(queryMarket || '');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   }, [queryCommodity, queryMarket, trends]);
@@ -120,15 +129,15 @@ export default function MarketTrends() {
             const pointsCount = Math.min(timeRange, 7);
             for (let i = pointsCount - 1; i >= 0; i--) {
               const d = new Date(today);
-              d.setDate(d.getDate() - i * 4);
-              const variance = (Math.sin(i) * 0.05 + (i / pointsCount) * 0.03) * (current.latest_price || 2000);
-              const calculatedModal = Math.round((current.latest_price || 2000) - variance);
+              d.setDate(d.getDate() - i * 3);
+              const variance = (Math.random() - 0.5) * (current.latest_price * 0.05);
               fallbackPoints.push({
                 date: d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }),
-                modalPrice: calculatedModal,
-                minPrice: Math.round(calculatedModal * 0.92),
-                maxPrice: Math.round(calculatedModal * 1.08),
-                market: selectedMarket || 'Average'
+                rawDate: d.toISOString(),
+                modalPrice: Math.round(current.latest_price + variance),
+                minPrice: current.min_price || Math.round((current.latest_price + variance) * 0.92),
+                maxPrice: current.max_price || Math.round((current.latest_price + variance) * 1.08),
+                market: selectedMarket || 'General'
               });
             }
             setHistoryData(fallbackPoints);
@@ -136,9 +145,8 @@ export default function MarketTrends() {
             setHistoryData([]);
           }
         }
-      } catch (err) {
-        console.error('Error fetching price history:', err);
-        setHistoryData([]);
+      } catch (error) {
+        console.error('Error fetching price history:', error);
       } finally {
         setHistoryLoading(false);
       }
@@ -153,6 +161,7 @@ export default function MarketTrends() {
     setSelectedCommodity(commodity);
     setSelectedMarket(market);
     setSearchParams({ commodity, ...(market ? { market } : {}) });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const filteredTrends = trends.filter((t) =>
@@ -160,7 +169,7 @@ export default function MarketTrends() {
   );
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Navigation & Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">

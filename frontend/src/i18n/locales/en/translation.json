@@ -48,7 +48,7 @@
     "sign_in_dashboard": "Sign in to your farming dashboard",
     "create_account": "Create Account",
     "already_registered": "Already registered?",
-    "new_to_smart_agri": "New to Smart Agri?",
+    "new_to_smart_agri": "New to Farmer-360?",
     "sign_in_existing": "Sign In to Existing Account",
     "full_name": "Full Name",
     "phone": "Phone Number",
@@ -92,7 +92,7 @@
     "try_current_location": "Try current location",
     "get_started": "Get Started",
     "sign_up": "Sign Up",
-    "smart_agri_title": "Smart Agricultural Intelligence Platform",
+    "smart_agri_title": "Farmer-360 Intelligence Platform",
     "smart_agri_subtitle": "Get real-time market prices, government schemes, and AI-powered farming advice",
     "feature_market_prices": "Market Prices",
     "feature_market_desc": "Real-time commodity prices from major markets",
@@ -298,7 +298,7 @@
     }
   },
   "prediction": {
-    "title": "Smart-Agri",
+    "title": "Farmer-360",
     "subtitle": "Advanced crop yield prediction based on soil and environmental data",
     "form_title": "Crop Yield Prediction",
     "form_subtitle": "Please enter your crop and land details",
@@ -311,7 +311,7 @@
     "predict_button": "Predict Yield",
     "predicting": "Calculating...",
     "how_to_use": "📘 How to Use",
-    "how_to_use_desc": "Smart-Agri tool helps farmers make informed decisions based on weather, soil, and data.",
+    "how_to_use_desc": "Farmer-360 tool helps farmers make informed decisions based on weather, soil, and data.",
     "step_1": "Select Crop – e.g., Wheat, Rice, Maize, etc.",
     "step_2": "Enter Land Area – in acres.",
     "step_3": "Select Soil Type – according to your land.",
@@ -474,6 +474,6 @@
     "terms_of_service": "Terms of Service",
     "empower_note": "Empowering farmers with intelligent agricultural solutions",
     "built_with_love": "Built with ❤️ for farmers",
-    "copyright": "© 2025 Smart Agricultural Intelligence Platform. All rights reserved."
+    "copyright": "© 2025 Farmer-360 Intelligence Platform. All rights reserved."
   }
 }

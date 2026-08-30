@@ -38,7 +38,7 @@ export default function Alerts() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <style>{`
         @keyframes slideDownWithBounce {
           0% {

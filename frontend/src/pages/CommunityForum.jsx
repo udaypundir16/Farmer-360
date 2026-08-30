@@ -147,7 +147,7 @@ export default function CommunityForum() {
 
   if (selectedPost) {
     return (
-      <div className="min-h-screen bg-cream-100 py-8">
+      <div className="min-h-screen bg-transparent py-8">
         <div className="container mx-auto p-4">
           <Button
             onClick={() => setSelectedPost(null)}
@@ -253,7 +253,7 @@ export default function CommunityForum() {
   }
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4">
         {/* Header */}
         <div className="mb-8 animate-fade-in-up">

@@ -596,6 +596,16 @@
   }
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 @media (min-width: 641px) and (max-width: 1024px) {
   .grid-cols-4 {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;

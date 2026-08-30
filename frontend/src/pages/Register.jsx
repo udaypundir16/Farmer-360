@@ -131,7 +131,7 @@ export default function Register() {
             </div>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
-            Join Smart Agri
+            Join Farmer-360
           </h1>
           <p className="text-gray-600 text-sm">Start your intelligent farming journey today</p>
         </div>

@@ -32,7 +32,7 @@ export default function Profile() {
           '#dc2626';
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <style>{`
         .profile-header-ring {
           position: relative;
@@ -108,41 +108,41 @@ export default function Profile() {
         {/* Tabs - cream content area */}
         <div ref={tabsRef} className="rounded-agri-lg bg-white shadow-agri border border-primary-100 overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-0 bg-primary-800 p-2 m-0 rounded-none border-b border-primary-700">
+            <TabsList className="flex w-full overflow-x-auto gap-1.5 bg-primary-800 p-2 m-0 rounded-none border-b border-primary-700 no-scrollbar">
               <TabsTrigger
                 value="edit"
-                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg py-2.5 transition-all font-medium"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg px-3 py-2.5 transition-all font-medium flex-1 min-w-[100px] justify-center"
               >
                 <User size={18} />
-                <span className="hidden md:inline">Profile</span>
+                <span className="text-xs sm:text-sm whitespace-nowrap">Profile</span>
               </TabsTrigger>
               <TabsTrigger
                 value="password"
-                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg py-2.5 transition-all font-medium"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg px-3 py-2.5 transition-all font-medium flex-1 min-w-[100px] justify-center"
               >
                 <Lock size={18} />
-                <span className="hidden md:inline">Password</span>
+                <span className="text-xs sm:text-sm whitespace-nowrap">Password</span>
               </TabsTrigger>
               <TabsTrigger
                 value="notifications"
-                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg py-2.5 transition-all font-medium"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg px-3 py-2.5 transition-all font-medium flex-1 min-w-[100px] justify-center"
               >
                 <Bell size={18} />
-                <span className="hidden md:inline">Alerts</span>
+                <span className="text-xs sm:text-sm whitespace-nowrap">Alerts</span>
               </TabsTrigger>
               <TabsTrigger
                 value="applications"
-                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg py-2.5 transition-all font-medium"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg px-3 py-2.5 transition-all font-medium flex-1 min-w-[100px] justify-center"
               >
                 <FileText size={18} />
-                <span className="hidden md:inline">Apps</span>
+                <span className="text-xs sm:text-sm whitespace-nowrap">Apps</span>
               </TabsTrigger>
               <TabsTrigger
                 value="alerts"
-                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg py-2.5 transition-all font-medium"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary-800 data-[state=inactive]:text-gold-100 rounded-lg px-3 py-2.5 transition-all font-medium flex-1 min-w-[100px] justify-center"
               >
                 <History size={18} />
-                <span className="hidden md:inline">History</span>
+                <span className="text-xs sm:text-sm whitespace-nowrap">History</span>
               </TabsTrigger>
             </TabsList>
 

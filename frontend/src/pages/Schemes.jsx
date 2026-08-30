@@ -6,7 +6,7 @@ import SchemeNews from '../components/schemes/SchemeNews';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import Loader from '../components/ui/loader';
-import { Search, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function Schemes() {
@@ -43,8 +43,12 @@ export default function Schemes() {
 
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
+  const activeFilterCount = (filters.category ? 1 : 0) + (filters.state ? 1 : 0) + (filters.search ? 1 : 0);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [showMobileNews, setShowMobileNews] = useState(false);
+
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4">
         <div className="mb-8 animate-fade-in-up">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-2 text-primary-800">
@@ -54,8 +58,8 @@ export default function Schemes() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Filter sidebar - glassmorphism */}
-          <aside className="lg:w-72 flex-shrink-0">
+          {/* Desktop Filter Sidebar */}
+          <aside className="hidden lg:block lg:w-72 flex-shrink-0">
             <div className="sticky top-24 p-6 rounded-agri-lg glass border border-primary-100/50">
               <h3 className="font-heading text-lg font-bold text-soil mb-4">Filters</h3>
               <SchemeFilters filters={filters} setFilters={setFilters} />
@@ -67,6 +71,99 @@ export default function Schemes() {
           </aside>
 
           <main className="flex-1">
+            {/* Mobile Side-by-Side Action Bar */}
+            <div className="lg:hidden mb-4 space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Button 1: Filters */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMobileFilters(!showMobileFilters);
+                    if (!showMobileFilters) setShowMobileNews(false);
+                  }}
+                  className={`flex items-center justify-between px-3.5 py-3 rounded-agri border shadow-sm font-semibold transition-all min-h-[44px] ${
+                    showMobileFilters
+                      ? 'bg-primary-700 text-white border-primary-700 shadow-md'
+                      : 'bg-white text-primary-800 border-primary-200 hover:bg-primary-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <SlidersHorizontal size={18} className={showMobileFilters ? 'text-white' : 'text-primary-600'} />
+                    <span className="text-sm truncate">Filters</span>
+                    {activeFilterCount > 0 && (
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          showMobileFilters ? 'bg-white text-primary-800' : 'bg-primary-600 text-white'
+                        }`}
+                      >
+                        {activeFilterCount}
+                      </span>
+                    )}
+                  </div>
+                  {showMobileFilters ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
+
+                {/* Button 2: Latest News */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMobileNews(!showMobileNews);
+                    if (!showMobileNews) setShowMobileFilters(false);
+                  }}
+                  className={`flex items-center justify-between px-3.5 py-3 rounded-agri border shadow-sm font-semibold transition-all min-h-[44px] ${
+                    showMobileNews
+                      ? 'bg-primary-700 text-white border-primary-700 shadow-md'
+                      : 'bg-white text-primary-800 border-primary-200 hover:bg-primary-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <BookOpen size={18} className={showMobileNews ? 'text-white' : 'text-primary-600'} />
+                    <span className="text-sm truncate">Latest News</span>
+                  </div>
+                  {showMobileNews ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
+              </div>
+
+              {/* Drawer 1: Mobile Filters */}
+              {showMobileFilters && (
+                <div className="p-4 bg-white rounded-agri-lg shadow-md border border-primary-100 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+                    <h3 className="font-heading text-base font-bold text-soil">
+                      Filter Government Schemes
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowMobileFilters(false)}
+                      className="text-xs text-soil-light hover:text-soil"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  <SchemeFilters filters={filters} setFilters={setFilters} />
+                </div>
+              )}
+
+              {/* Drawer 2: Mobile Latest News */}
+              {showMobileNews && (
+                <div className="p-4 bg-white rounded-agri-lg shadow-md border border-primary-100 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+                    <h3 className="font-heading text-base font-bold text-soil flex items-center gap-2">
+                      <BookOpen size={18} className="text-primary-600" />
+                      <span>Agriculture & Scheme News</span>
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowMobileNews(false)}
+                      className="text-xs text-soil-light hover:text-soil"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  <SchemeNews />
+                </div>
+              )}
+            </div>
+
             <div className="mb-6">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-500" size={20} />

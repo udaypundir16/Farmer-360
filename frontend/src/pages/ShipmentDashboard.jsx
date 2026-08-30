@@ -34,7 +34,7 @@ const ShipmentDashboard = () => {
   const [submitting, setSubmitting] = useState(false);
 
   // API base URL
-  const API_URL = import.meta.env.VITE_API_URL || 'https://smart-agri-production.up.railway.app/api/v1';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://farmer-360-production.up.railway.app/api/v1';
   const authToken = localStorage.getItem('token');
 
   /**
@@ -253,7 +253,7 @@ const ShipmentDashboard = () => {
   }, [statusFilter]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent py-8">
       {/* Header */}
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -287,55 +287,56 @@ const ShipmentDashboard = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">{t('forum.all_topics')}</p>
-            <p className="text-3xl font-bold text-gray-800">{stats.total}</p>
+            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('forum.all_topics')}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-800">{stats.total}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">{t('shipments.create_shipment')}</p>
-            <p className="text-3xl font-bold text-blue-600">{stats.created}</p>
+            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.create_shipment')}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.created}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_dispatched')}</p>
-            <p className="text-3xl font-bold text-yellow-600">{stats.pickedUp}</p>
+            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_dispatched')}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.pickedUp}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_in_transit')}</p>
-            <p className="text-3xl font-bold text-purple-600">{stats.inTransit}</p>
+            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_in_transit')}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.inTransit}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-sm font-medium">{t('shipments.status_delivered')}</p>
-            <p className="text-3xl font-bold text-green-600">{stats.delivered}</p>
+          <div className="bg-white rounded-lg shadow p-4 col-span-2 sm:col-span-1">
+            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_delivered')}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.delivered}</p>
           </div>
-          {/* Search and Filter Section */}
-          <div className="bg-white rounded-lg shadow p-4 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
+        </div>
 
-              {/* Status Filter */}
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              >
-                <option value="all">{t('forum.all_topics')}</option>
-                <option value="created">{t('shipments.create_shipment')}</option>
-                <option value="picked_up">{t('shipments.status_dispatched')}</option>
-                <option value="in_transit">{t('shipments.status_in_transit')}</option>
-                <option value="delivered">{t('shipments.status_delivered')}</option>
-              </select>
+        {/* Search and Filter Section */}
+        <div className="bg-white rounded-lg shadow p-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
             </div>
+
+            {/* Status Filter */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            >
+              <option value="all">{t('forum.all_topics')}</option>
+              <option value="created">{t('shipments.create_shipment')}</option>
+              <option value="picked_up">{t('shipments.status_dispatched')}</option>
+              <option value="in_transit">{t('shipments.status_in_transit')}</option>
+              <option value="delivered">{t('shipments.status_delivered')}</option>
+            </select>
           </div>
           <p className="text-sm text-gray-600">
             {filteredShipments.length} / {shipments.length} {t('shipments.title')}

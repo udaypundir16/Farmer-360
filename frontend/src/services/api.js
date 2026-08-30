@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://smart-agri-production.up.railway.app/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'https://farmer-360-production.up.railway.app/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

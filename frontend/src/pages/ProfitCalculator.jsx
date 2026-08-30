@@ -80,7 +80,7 @@ export default function ProfitCalculator() {
   ];
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4">
         <div className="mb-8 animate-fade-in-up">
           <div className="inline-block px-6 py-3 rounded-agri-lg bg-white/80 backdrop-blur-sm border border-primary-100 shadow-agri">

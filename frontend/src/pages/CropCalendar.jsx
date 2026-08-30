@@ -46,7 +46,7 @@ export default function CropCalendar() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

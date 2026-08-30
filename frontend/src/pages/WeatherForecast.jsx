@@ -164,7 +164,7 @@ export default function WeatherForecast() {
   const selectedForecast = (forecast?.forecast && forecast.forecast[selectedDay]) || forecast?.current || {};
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4 max-w-6xl">
         {/* Page Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

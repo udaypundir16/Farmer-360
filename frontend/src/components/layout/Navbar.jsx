@@ -32,22 +32,20 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? 'glass-navbar shadow-agri' : 'bg-cream-100/90 backdrop-blur-md border-b border-primary-100/40'
-        }`}
+      className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-gray-200 transition-all duration-300"
     >
       <div className="w-[98%] max-w-[1400px] mx-auto px-2 sm:px-4">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-3 group transition-transform duration-300 hover:scale-[1.02]"
+            className="flex items-center group transition-transform duration-300 hover:scale-[1.02]"
           >
-            <div className="p-2.5 rounded-agri bg-gradient-to-br from-primary-700 to-primary-600 shadow-agri group-hover:shadow-agri-glow transition-shadow duration-300">
-              <Wheat size={26} className="text-gold-200" strokeWidth={2.5} />
-            </div>
-            <span className="font-heading text-2xl font-bold text-primary-800 tracking-tight">
-              SmartAgri
-            </span>
+            <img
+              src="/images/farmer360_logo.png"
+              alt="Farmer-360 - Cultivating Completeness in Agriculture"
+              className="h-12 sm:h-14 w-auto object-contain py-1"
+            />
           </Link>
 
           {/* Desktop menu */}
@@ -122,7 +120,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-agri text-primary-700 hover:bg-primary-50 transition-all duration-300"
+            className="lg:hidden p-2 rounded-agri text-primary-700 hover:bg-primary-50 transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
           >
@@ -132,7 +130,7 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden pb-6 animate-in fade-in slide-in-from-top-4 duration-300 border-t border-primary-100/50">
+          <div className="lg:hidden pb-6 animate-in fade-in slide-in-from-top-4 duration-300 border-t border-primary-100/50">
             <div className="space-y-1 pt-4">
               {/* Main navigation links */}
               {navLinks.map((link) => (
@@ -140,7 +138,7 @@ export default function Navbar() {
                   key={link.to}
                   to={link.to}
                   className={`block px-4 py-3 rounded-lg font-medium transition-colors ${location.pathname === link.to
-                    ? 'bg-primary-100 text-primary-800'
+                    ? 'bg-primary-100 text-primary-800 font-semibold'
                     : 'text-soil-light hover:bg-primary-50'
                     }`}
                   onClick={() => setIsOpen(false)}
@@ -148,22 +146,48 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-
-
             </div>
-            <div className="flex items-center justify-between pt-4 mt-4 border-t border-primary-100/50">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-4 pt-4 mt-4 border-t border-primary-100/50">
+              <div className="flex items-center justify-between">
                 <LanguageSelector />
+                {user ? (
+                  <div className="flex items-center gap-2">
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-50 border border-primary-100"
+                    >
+                      <User size={14} className="text-primary-700" />
+                      <span className="text-xs font-semibold text-soil">{user?.fullName?.split(' ')[0]}</span>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => { setIsOpen(false); handleLogout(); }}
+                      className="text-earth-600 hover:bg-earth-50"
+                    >
+                      <LogOut size={18} />
+                    </Button>
+                  </div>
+                ) : null}
               </div>
-              {user && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-earth-600 hover:bg-earth-50"
-                >
-                  <LogOut size={18} />
-                </Button>
+              {!user && (
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center font-bold px-4 py-2.5 rounded-xl border-2 border-earth-400 text-earth-700 hover:bg-earth-50 transition-all text-sm"
+                  >
+                    {t('common.login')}
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center font-bold px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 text-white shadow-agri transition-all text-sm"
+                  >
+                    {t('common.register')}
+                  </Link>
+                </div>
               )}
             </div>
           </div>

@@ -10,8 +10,11 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
           <div className="flex items-center gap-2">
-            <Wheat className="text-primary-600" size={24} />
-            <h3 className="font-heading font-bold text-soil">SmartAgri</h3>
+            <img
+              src="/images/farmer360_logo.png"
+              alt="Farmer-360"
+              className="h-10 w-auto object-contain"
+            />
           </div>
           <p className="text-sm text-soil-light md:col-span-3 max-w-md">
             {t('footer.empower_note')}

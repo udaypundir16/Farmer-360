@@ -61,7 +61,7 @@ export default function Markets() {
   const downTrend = filteredPrices.filter(p => p.trend === 'down').length;
 
   return (
-    <div className="min-h-screen bg-cream-100 py-8">
+    <div className="min-h-screen bg-transparent py-8">
       <div className="container mx-auto p-4">
         <div className="mb-8 animate-fade-in-up flex justify-between items-start">
           <div>
@@ -140,6 +140,7 @@ export default function Markets() {
                   price={price}
                   onClick={() => {
                     navigate(`/market-trends?commodity=${encodeURIComponent(price.commodity)}&market=${encodeURIComponent(price.market || '')}`);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 />
               </div>

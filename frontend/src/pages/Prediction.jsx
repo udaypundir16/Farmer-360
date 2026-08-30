@@ -40,7 +40,7 @@ export default function Prediction() {
     };
 
     return (
-        <div className="min-h-screen bg-cream-50 py-8 px-4">
+        <div className="min-h-screen bg-transparent py-8 px-4">
             <div className="max-w-3xl mx-auto space-y-10">
                 <div className="text-center mb-8 animate-fade-in-up">
                     <h1 className="font-heading text-3xl md:text-4xl font-bold text-primary-800 mb-2">
