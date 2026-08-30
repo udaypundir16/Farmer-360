@@ -2,24 +2,24 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { Button } from '../components/ui/button';
-import { Leaf, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, User, Phone, Lock, CheckCircle } from 'lucide-react';
 
 export default function Register() {
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
-  const { register: signup } = useAuth();
+  const { register: signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const phoneValue = watch('phone');
 
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
       setError('');
-      const formattedData = { 
-        ...data, 
+      const formattedData = {
+        ...data,
         phone: `+91${data.phone}`
       };
       await signup(formattedData);
@@ -28,6 +28,22 @@ export default function Register() {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      setIsGoogleLoading(true);
+      setError('');
+      await loginWithGoogle({
+        fullName: 'New Farmer User',
+        email: 'newfarmer.farmer360@gmail.com'
+      });
+      navigate('/');
+    } catch (err) {
+      setError('Google Sign-Up failed. Please try again.');
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -45,104 +61,94 @@ export default function Register() {
   const strength = passwordStrength(pwd);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <style>{`
-        @keyframes slideInCenter {
-          from {
-            opacity: 0;
-            transform: scale(0.95) translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .register-container {
-          animation: slideInCenter 0.7s ease-out;
-        }
-        
-        .logo-section {
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .form-input {
-          transition: all 0.3s ease;
-          border: 2px solid rgba(16, 185, 129, 0.1);
-        }
-        
-        .form-input:focus {
-          border-color: rgb(16, 185, 129);
-          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-          transform: scale(1.02);
-        }
-        
-        .form-input:valid {
-          border-color: rgb(34, 197, 94);
-        }
-        
-        .submit-button {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.3s ease;
-        }
-        
-        .submit-button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 24px rgba(16, 185, 129, 0.4);
-        }
-        
-        .submit-button:active:not(:disabled) {
-          transform: translateY(0);
-        }
-        
-        .submit-button:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-        
-        .error-message {
-          animation: slideInCenter 0.3s ease-out;
-        }
-        
-        .strength-bar {
-          transition: all 0.3s ease;
-          background: linear-gradient(to right, #ef4444, #f97316, #eab308, #84cc16);
-          background-size: 400% 100%;
-          background-position: 0% 0%;
-        }
-      `}</style>
+    <div
+      className="min-h-screen flex items-center justify-center bg-fixed bg-center bg-no-repeat bg-cover py-12 px-4 sm:px-6 lg:px-8 relative"
+      style={{ backgroundImage: "url('/images/page_bg.jpg')" }}
+    >
+      {/* Soft Backdrop Overlay */}
+      <div className="absolute inset-0 bg-cream-100/30 backdrop-blur-[2px] pointer-events-none" />
 
-      {/* Background Gradient Blobs */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-
-      <div className="register-container max-w-md w-full space-y-8 relative z-10">
-        {/* Logo Section */}
-        <div className="logo-section text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg">
-              <Leaf size={40} className="text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
-            Join Farmer-360
-          </h1>
-          <p className="text-gray-600 text-sm">Start your intelligent farming journey today</p>
+      <div className="max-w-md w-full space-y-6 relative z-10 animate-fade-in-up">
+        {/* Logo Header */}
+        <div className="text-center">
+          <Link to="/" className="inline-block hover:scale-[1.02] transition-transform">
+            <img
+              src="/images/farmer360_logo.png"
+              alt="Farmer-360 Logo"
+              className="h-16 sm:h-20 w-auto mx-auto object-contain mb-2 drop-shadow-md"
+            />
+          </Link>
+          <p className="text-soil-dark font-semibold text-sm">
+            Join Farmer-360 Intelligent Platform
+          </p>
         </div>
 
-        {/* Form Section */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8 backdrop-blur-xl border border-emerald-100">
+        {/* Card Container */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-agri-lg p-6 sm:p-8 border border-primary-100/80">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-extrabold text-primary-950 font-heading">
+              Create Free Account
+            </h2>
+            <p className="text-soil-light text-xs sm:text-sm mt-1">
+              Start receiving live prices, AI guidance & subsidy alerts
+            </p>
+          </div>
+
+          {/* Google Sign Up Option */}
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={handleGoogleSignUp}
+              disabled={isGoogleLoading}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-300 bg-white text-gray-700 font-bold hover:bg-gray-50 hover:shadow-md active:scale-[0.99] transition-all duration-200 shadow-sm min-h-[44px]"
+            >
+              {isGoogleLoading ? (
+                <span className="inline-block animate-spin">⌛ Connecting...</span>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    />
+                  </svg>
+                  <span>Sign up with Google</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-xs font-bold uppercase tracking-wider">
+              <span className="px-3 bg-white text-gray-500 rounded-full border border-gray-200">
+                or register with details
+              </span>
+            </div>
+          </div>
+
+          {/* Form */}
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             {/* Full Name Input */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name
+              <label htmlFor="fullName" className="block text-xs font-bold text-soil uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <User size={14} className="text-primary-600" />
+                <span>Full Name</span>
               </label>
               <input
                 id="fullName"
@@ -155,10 +161,10 @@ export default function Register() {
                     message: 'Name must be at least 3 characters'
                   }
                 })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-600 focus:ring-2 focus:ring-primary-500/20 text-gray-900 font-medium placeholder-gray-400 text-sm transition-all"
               />
               {errors.fullName && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
+                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
                   ⚠️ {errors.fullName.message}
                 </p>
               )}
@@ -166,29 +172,35 @@ export default function Register() {
 
             {/* Phone Input */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
-                Mobile Number
+              <label htmlFor="phone" className="block text-xs font-bold text-soil uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Phone size={14} className="text-primary-600" />
+                <span>Mobile Number</span>
               </label>
-              <input
-                id="phone"
-                type="tel"
-                placeholder="Enter your 10-digit mobile number"
-                {...register('phone', {
-                  required: 'Phone number is required',
-                  pattern: {
-                    value: /^[0-9]{10}$/,
-                    message: 'Please enter a valid 10-digit phone number'
-                  }
-                })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
-              />
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-500">
+                  +91
+                </span>
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="Enter 10-digit mobile number"
+                  {...register('phone', {
+                    required: 'Phone number is required',
+                    pattern: {
+                      value: /^[0-9]{10}$/,
+                      message: 'Please enter a valid 10-digit phone number'
+                    }
+                  })}
+                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-600 focus:ring-2 focus:ring-primary-500/20 text-gray-900 font-medium placeholder-gray-400 text-sm transition-all"
+                />
+              </div>
               {errors.phone && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
+                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
                   ⚠️ {errors.phone.message}
                 </p>
               )}
               {phoneValue && phoneValue.length === 10 && !errors.phone && (
-                <p className="text-green-600 text-xs mt-2 flex items-center gap-1">
+                <p className="text-green-600 text-xs mt-1.5 font-medium flex items-center gap-1">
                   <CheckCircle size={14} /> Valid phone number
                 </p>
               )}
@@ -196,8 +208,9 @@ export default function Register() {
 
             {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                Password
+              <label htmlFor="password" className="block text-xs font-bold text-soil uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Lock size={14} className="text-primary-600" />
+                <span>Password</span>
               </label>
               <div className="relative">
                 <input
@@ -211,28 +224,28 @@ export default function Register() {
                       message: 'Password must be at least 6 characters'
                     }
                   })}
-                  className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors pr-12"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-600 focus:ring-2 focus:ring-primary-500/20 text-gray-900 font-medium placeholder-gray-400 text-sm transition-all pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-emerald-600 transition-colors"
+                  className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary-700 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
+                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
                   ⚠️ {errors.password.message}
                 </p>
               )}
 
               {/* Password Strength Indicator */}
               {pwd && (
-                <div className="mt-3">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs text-gray-600">Password Strength</span>
-                    <span className={`text-xs font-semibold ${strength === 1 ? 'text-red-600' :
+                <div className="mt-2.5">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs font-medium text-gray-600">Password Strength</span>
+                    <span className={`text-xs font-bold ${strength === 1 ? 'text-red-600' :
                         strength === 2 ? 'text-orange-600' :
                           strength === 3 ? 'text-yellow-600' :
                             'text-green-600'
@@ -240,14 +253,14 @@ export default function Register() {
                       {strength === 1 ? 'Weak' : strength === 2 ? 'Fair' : strength === 3 ? 'Good' : 'Strong'}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
                     <div
-                      className="strength-bar h-full transition-all duration-300"
+                      className="h-full transition-all duration-300"
                       style={{
                         width: `${(strength / 4) * 100}%`,
-                        backgroundPosition: `${100 - (strength / 4) * 100}% 0%`
+                        backgroundColor: strength === 1 ? '#ef4444' : strength === 2 ? '#f97316' : strength === 3 ? '#eab308' : '#22c55e'
                       }}
-                    ></div>
+                    />
                   </div>
                 </div>
               )}
@@ -255,8 +268,8 @@ export default function Register() {
 
             {/* Error Message */}
             {error && (
-              <div className="error-message p-4 rounded-lg bg-red-50 border border-red-200">
-                <p className="text-red-700 text-sm font-medium">❌ {error}</p>
+              <div className="p-3.5 rounded-xl bg-red-50 border border-red-200">
+                <p className="text-red-700 text-xs font-semibold">❌ {error}</p>
               </div>
             )}
 
@@ -264,12 +277,12 @@ export default function Register() {
             <button
               type="submit"
               disabled={isLoading}
-              className="submit-button w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 shadow-lg transition-none"
+              className="w-full py-3.5 px-4 rounded-xl font-bold bg-gradient-to-r from-primary-700 to-primary-600 text-white shadow-agri hover:shadow-agri-lg hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-base mt-2 min-h-[44px]"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="inline-block animate-spin">⌛</span>
-                  Creating account...
+                  <span>Creating account...</span>
                 </span>
               ) : (
                 'Create Account'
@@ -277,31 +290,21 @@ export default function Register() {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="my-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Already registered?</span>
-            </div>
+          {/* Links */}
+          <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+            <p className="text-xs text-soil-light">
+              Already registered?{' '}
+              <Link to="/login" className="font-bold text-primary-700 hover:underline">
+                Sign In to Existing Account →
+              </Link>
+            </p>
           </div>
-
-          {/* Login Link */}
-          <Link
-            to="/login"
-            className="block w-full text-center py-3 px-4 rounded-lg border-2 border-emerald-200 text-emerald-600 font-semibold"
-          >
-            Sign In to Existing Account
-          </Link>
         </div>
 
-        {/* Footer Text */}
-        <p className="text-center text-xs text-gray-600">
-          By creating an account, you agree to our{' '}
-          <a href="#" className="text-emerald-600 font-semibold hover:underline">
-            Terms of Service
-          </a>
+        {/* Security Note */}
+        <p className="text-center text-xs text-soil-dark font-medium flex items-center justify-center gap-1.5">
+          <ShieldCheck size={14} className="text-primary-700" />
+          <span>Encrypted & Secured by Farmer-360 Platform</span>
         </p>
       </div>
     </div>
