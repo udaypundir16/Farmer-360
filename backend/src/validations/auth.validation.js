@@ -6,11 +6,11 @@ exports.registerSchema = Joi.object({
   }),
   password: Joi.string().min(6).required(),
   fullName: Joi.string().min(3).max(100).required(),
-  village: Joi.string().min(2).required(),
-  district: Joi.string().min(2).required(),
-  state: Joi.string().min(2).required(),
+  village: Joi.string().min(2).optional().allow('', null),
+  district: Joi.string().min(2).optional().allow('', null),
+  state: Joi.string().min(2).optional().allow('', null),
   languagePref: Joi.string().valid('en', 'hi', 'ta', 'te', 'mr').default('en'),
-  cropsGrown: Joi.array().items(Joi.string()).min(1).required()
+  cropsGrown: Joi.array().items(Joi.string()).optional().default([])
 });
 
 exports.loginSchema = Joi.object({

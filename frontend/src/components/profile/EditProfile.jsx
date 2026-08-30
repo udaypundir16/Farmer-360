@@ -9,7 +9,7 @@ export default function EditProfile({ user }) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [message, setMessage] = useState('');
   const { setUser, refreshUser } = useAuth();
-  
+
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       fullName: user.fullName,
@@ -24,7 +24,7 @@ export default function EditProfile({ user }) {
     try {
       const cropsArray = data.cropsGrown.split(',').map(s => s.trim()).filter(Boolean);
       const response = await updateProfile({ ...data, cropsGrown: cropsArray });
-      
+
       // Update user context immediately if response contains user data
       if (response.user) {
         setUser(response.user);
@@ -32,7 +32,7 @@ export default function EditProfile({ user }) {
         // Fallback: refresh user data from server
         await refreshUser();
       }
-      
+
       setMessage('Profile updated successfully');
       setIsEditMode(false);
       setTimeout(() => setMessage(''), 3000);
@@ -114,8 +114,8 @@ export default function EditProfile({ user }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-        <input 
-          {...register('fullName', { required: 'Full name is required' })} 
+        <input
+          {...register('fullName', { required: 'Full name is required' })}
           className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-primary-500 focus:outline-none transition-colors"
           placeholder="Enter full name"
         />
@@ -124,8 +124,8 @@ export default function EditProfile({ user }) {
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">Village</label>
-        <input 
-          {...register('village', { required: 'Village is required' })} 
+        <input
+          {...register('village')}
           className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-primary-500 focus:outline-none transition-colors"
           placeholder="Enter village name"
         />
@@ -134,8 +134,8 @@ export default function EditProfile({ user }) {
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">District</label>
-        <input 
-          {...register('district', { required: 'District is required' })} 
+        <input
+          {...register('district')}
           className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-primary-500 focus:outline-none transition-colors"
           placeholder="Enter district"
         />
@@ -144,8 +144,8 @@ export default function EditProfile({ user }) {
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
-        <input 
-          {...register('state', { required: 'State is required' })} 
+        <input
+          {...register('state')}
           className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-primary-500 focus:outline-none transition-colors"
           placeholder="Enter state"
         />
@@ -154,8 +154,8 @@ export default function EditProfile({ user }) {
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">Crops Grown (comma separated)</label>
-        <input 
-          {...register('cropsGrown', { required: 'At least one crop is required' })} 
+        <input
+          {...register('cropsGrown')}
           className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-primary-500 focus:outline-none transition-colors"
           placeholder="e.g., Rice, Wheat, Corn"
         />

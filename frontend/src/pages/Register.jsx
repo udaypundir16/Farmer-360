@@ -18,12 +18,9 @@ export default function Register() {
     try {
       setIsLoading(true);
       setError('');
-      // Convert crops string to array and format phone
-      const cropsArray = data.cropsGrown.split(',').map(s => s.trim()).filter(Boolean);
       const formattedData = { 
         ...data, 
-        phone: `+91${data.phone}`,
-        cropsGrown: cropsArray
+        phone: `+91${data.phone}`
       };
       await signup(formattedData);
       navigate('/');
@@ -195,91 +192,6 @@ export default function Register() {
                   <CheckCircle size={14} /> Valid phone number
                 </p>
               )}
-            </div>
-
-            {/* Village Input */}
-            <div>
-              <label htmlFor="village" className="block text-sm font-semibold text-gray-700 mb-2">
-                Village
-              </label>
-              <input
-                id="village"
-                type="text"
-                placeholder="Enter your village name"
-                {...register('village', {
-                  required: 'Village is required'
-                })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
-              />
-              {errors.village && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
-                  ⚠️ {errors.village.message}
-                </p>
-              )}
-            </div>
-
-            {/* District Input */}
-            <div>
-              <label htmlFor="district" className="block text-sm font-semibold text-gray-700 mb-2">
-                District
-              </label>
-              <input
-                id="district"
-                type="text"
-                placeholder="Enter your district"
-                {...register('district', {
-                  required: 'District is required'
-                })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
-              />
-              {errors.district && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
-                  ⚠️ {errors.district.message}
-                </p>
-              )}
-            </div>
-
-            {/* State Input */}
-            <div>
-              <label htmlFor="state" className="block text-sm font-semibold text-gray-700 mb-2">
-                State
-              </label>
-              <input
-                id="state"
-                type="text"
-                placeholder="Enter your state"
-                {...register('state', {
-                  required: 'State is required'
-                })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
-              />
-              {errors.state && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
-                  ⚠️ {errors.state.message}
-                </p>
-              )}
-            </div>
-
-            {/* Crops Grown Input */}
-            <div>
-              <label htmlFor="cropsGrown" className="block text-sm font-semibold text-gray-700 mb-2">
-                Crops Grown (comma separated)
-              </label>
-              <input
-                id="cropsGrown"
-                type="text"
-                placeholder="e.g., Rice, Wheat, Corn"
-                {...register('cropsGrown', {
-                  required: 'At least one crop is required'
-                })}
-                className="form-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white transition-colors"
-              />
-              {errors.cropsGrown && (
-                <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
-                  ⚠️ {errors.cropsGrown.message}
-                </p>
-              )}
-              <p className="text-gray-500 text-xs mt-1">Enter multiple crops separated by commas</p>
             </div>
 
             {/* Password Input */}

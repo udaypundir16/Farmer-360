@@ -30,11 +30,11 @@ exports.register = async (req, res, next) => {
         phone,
         password_hash: hashedPassword,
         full_name: fullName,
-        village,
-        district,
-        state,
+        village: village || null,
+        district: district || null,
+        state: state || null,
         language_pref: languagePref || 'en',
-        crops_grown: cropsGrown
+        crops_grown: cropsGrown || []
       }])
       .select()
       .single();

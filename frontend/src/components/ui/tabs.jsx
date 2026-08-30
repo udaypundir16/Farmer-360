@@ -2,11 +2,14 @@ import { useState, createContext, useContext } from 'react';
 
 const TabsContext = createContext(null);
 
-export function Tabs({ defaultValue, children }) {
-  const [activeTab, setActiveTab] = useState(defaultValue);
+export function Tabs({ defaultValue, value, onValueChange, children, className = '' }) {
+  const [internalTab, setInternalTab] = useState(defaultValue);
+  // Support both controlled and uncontrolled modes
+  const activeTab = value !== undefined ? value : internalTab;
+  const setActiveTab = onValueChange || setInternalTab;
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>
-      <div>{children}</div>
+      <div className={className}>{children}</div>
     </TabsContext.Provider>
   );
 }
