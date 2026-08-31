@@ -73,11 +73,12 @@ export default function CropMarket() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Post Trade Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white p-6 rounded-agri-lg shadow-agri border border-primary-100 sticky top-24">
-              <h2 className="text-xl font-bold text-soil mb-4 flex items-center gap-2">
+            <div className="bg-white p-4 sm:p-6 rounded-agri-lg shadow-agri border border-primary-100 static lg:sticky top-24">
+              <h2 className="text-lg sm:text-xl font-bold text-soil mb-4 flex items-center gap-2">
+
                 <Plus size={20} className="text-primary-600" />
                 {t('crop_market.post_listing')}
               </h2>

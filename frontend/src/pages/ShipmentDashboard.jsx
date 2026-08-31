@@ -257,19 +257,20 @@ const ShipmentDashboard = () => {
       {/* Header */}
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">
-              <Truck className="inline mr-2" />
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center">
+              <Truck className="inline mr-2 text-primary-700" />
               {t('shipments.title')}
             </h1>
             <button
               onClick={() => setShowForm(true)}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2 font-medium"
+              className="bg-primary-700 text-white px-5 py-2.5 rounded-xl hover:bg-primary-800 transition flex items-center justify-center gap-2 font-bold w-full sm:w-auto text-sm shadow-sm min-h-[44px]"
             >
               <Plus className="w-4 h-4" />
               {t('shipments.create_shipment')}
             </button>
           </div>
+
 
           {/* Error Message */}
           {error && (

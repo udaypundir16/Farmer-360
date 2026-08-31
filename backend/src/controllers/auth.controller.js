@@ -1,7 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
+const { OAuth2Client } = require('google-auth-library');
 const { supabase } = require('../config/database');
 const { registerSchema, loginSchema } = require('../validations/auth.validation');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res, next) => {
   try {
@@ -117,3 +121,104 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.googleAuth = async (req, res, next) => {
+  try {
+    const { credential, access_token, user: clientUser } = req.body;
+    let googleUser = null;
+
+    if (credential) {
+      // Verify Google ID token
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      googleUser = {
+        sub: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture
+      };
+    } else if (access_token) {
+      // Fetch user profile from Google UserInfo endpoint
+      const userInfoRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${access_token}` }
+      });
+      googleUser = {
+        sub: userInfoRes.data.sub,
+        email: userInfoRes.data.email,
+        name: userInfoRes.data.name,
+        picture: userInfoRes.data.picture
+      };
+    } else if (clientUser && clientUser.email) {
+      googleUser = clientUser;
+    } else {
+      return res.status(400).json({ message: 'Google authentication credential is required' });
+    }
+
+    const googleId = googleUser.sub || googleUser.id || 'google_oauth';
+    const googlePhoneKey = `google_${googleId}`;
+
+    // Look up existing user in Supabase
+    let { data: user, error: findError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('phone', googlePhoneKey)
+      .maybeSingle();
+
+    if (findError && findError.code !== 'PGRST116') {
+      throw findError;
+    }
+
+    if (!user) {
+      // Create user record
+      const randomPasswordHash = await bcrypt.hash(`GOOGLE_AUTH_${googleId}_${Date.now()}`, 10);
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert([{
+          phone: googlePhoneKey,
+          password_hash: randomPasswordHash,
+          full_name: googleUser.name || googleUser.fullName || 'Farmer Member',
+          language_pref: 'en',
+          crops_grown: []
+        }])
+
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+      user = newUser;
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user.id, phone: user.phone, isAdmin: user.is_admin || false },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    );
+
+    res.json({
+      message: 'Google login successful',
+      token,
+      user: {
+        id: user.id,
+        phone: user.phone?.startsWith('google_') ? '' : user.phone,
+        fullName: user.full_name,
+        email: googleUser.email || '',
+        picture: googleUser.picture || '',
+        village: user.village || '',
+        district: user.district || '',
+        state: user.state || '',
+        cropsGrown: user.crops_grown || [],
+        languagePref: user.language_pref || 'en',
+        latitude: user.latitude,
+        longitude: user.longitude,
+        isAdmin: user.is_admin || false
+      }
+    });
+  } catch (error) {
+    console.error('Google Auth Error:', error);
+    res.status(401).json({ message: 'Google authentication failed. Please try again.' });
+  }
+};

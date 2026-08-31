@@ -26,8 +26,8 @@ import WeatherForecast from './pages/WeatherForecast';
 import ShipmentDashboard from './pages/ShipmentDashboard';
 import ProfitCalculator from './pages/ProfitCalculator';
 import CommunityForum from './pages/CommunityForum';
-import Prediction from './pages/Prediction';
 import CropMarket from './pages/CropMarket';
+
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ProtectedAdminRoute from './components/auth/ProtectedAdminRoute';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -68,9 +68,9 @@ function AppContent() {
           <Route path="shipments" element={<ProtectedRoute><ShipmentDashboard /></ProtectedRoute>} />
           <Route path="profit-calculator" element={<ProfitCalculator />} />
           <Route path="community-forum" element={<CommunityForum />} />
-          <Route path="prediction" element={<Prediction />} />
           <Route path="crop-market" element={<CropMarket />} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

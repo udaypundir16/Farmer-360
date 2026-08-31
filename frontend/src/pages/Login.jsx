@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Eye, EyeOff, ShieldCheck, Phone, Lock } from 'lucide-react';
 
 export default function Login() {
@@ -26,21 +27,31 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsGoogleLoading(true);
-      setError('');
-      await loginWithGoogle({
-        fullName: 'Manjeet Singh',
-        email: 'manjeet.farmer360@gmail.com'
-      });
-      navigate('/');
-    } catch (err) {
-      setError('Google Sign-In failed. Please try again.');
-    } finally {
+  const googleLoginTrigger = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setIsGoogleLoading(true);
+        setError('');
+        await loginWithGoogle({ access_token: tokenResponse.access_token });
+        navigate('/');
+      } catch (err) {
+        setError(err.response?.data?.message || 'Google Sign-In failed. Please try again.');
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    },
+    onError: (errorResponse) => {
+      console.error('Google Sign-In Error:', errorResponse);
+      setError('Google Sign-In was cancelled or failed.');
       setIsGoogleLoading(false);
     }
+  });
+
+  const handleGoogleSignIn = () => {
+    setError('');
+    googleLoginTrigger();
   };
+
 
   return (
     <div
@@ -48,7 +59,8 @@ export default function Login() {
       style={{ backgroundImage: "url('/images/page_bg.jpg')" }}
     >
       {/* Soft Backdrop Overlay */}
-      <div className="absolute inset-0 bg-cream-100/30 backdrop-blur-[2px] pointer-events-none" />
+      <div className="absolute inset-0 bg-cream-100/70 backdrop-blur-[2px] pointer-events-none" />
+
 
       <div className="max-w-md w-full space-y-6 relative z-10 animate-fade-in-up">
         {/* Logo Header */}
@@ -85,7 +97,7 @@ export default function Login() {
               className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-300 bg-white text-gray-700 font-bold hover:bg-gray-50 hover:shadow-md active:scale-[0.99] transition-all duration-200 shadow-sm min-h-[44px]"
             >
               {isGoogleLoading ? (
-                <span className="inline-block animate-spin">⌛ Connecting...</span>
+                <span className="flex items-center gap-2">Connecting...</span>
               ) : (
                 <>
                   <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">

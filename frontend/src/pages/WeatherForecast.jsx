@@ -164,36 +164,36 @@ export default function WeatherForecast() {
   const selectedForecast = (forecast?.forecast && forecast.forecast[selectedDay]) || forecast?.current || {};
 
   return (
-    <div className="min-h-screen bg-transparent py-8">
-      <div className="container mx-auto p-4 max-w-6xl">
+    <div className="min-h-screen bg-transparent py-6 sm:py-8">
+      <div className="container mx-auto px-3 sm:px-4 max-w-6xl">
         {/* Page Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-agri">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-agri flex-shrink-0">
               <Cloud size={28} />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold font-heading text-primary-900">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading text-primary-900 leading-tight">
                 {t('weather.title', 'Weather Forecast')}
               </h1>
-              <p className="text-soil-light text-sm md:text-base">
+              <p className="text-soil-light text-xs sm:text-sm md:text-base">
                 Real-time agricultural weather & 5-day farming outlook
               </p>
             </div>
           </div>
 
           {/* Quick Location Switcher */}
-          <div className="flex items-center gap-2 bg-white/80 backdrop-blur p-2 rounded-xl border border-primary-100 shadow-sm">
+          <div className="flex items-center justify-between gap-2 bg-white/90 backdrop-blur p-2.5 rounded-xl border border-primary-100 shadow-sm w-full md:w-auto">
             <MapPin size={18} className="text-primary-600 shrink-0" />
             <select
               onChange={(e) => {
                 const selected = POPULAR_LOCATIONS.find(l => l.name === e.target.value);
                 if (selected) handleSelectLocation(selected);
               }}
-              className="bg-transparent text-sm font-medium text-soil focus:outline-none cursor-pointer pr-2"
+              className="bg-transparent text-xs sm:text-sm font-medium text-soil focus:outline-none cursor-pointer flex-1 md:flex-none pr-2 min-w-0"
               defaultValue=""
             >
-              <option value="" disabled>Switch Location / Region...</option>
+              <option value="" disabled>Switch Region...</option>
               {POPULAR_LOCATIONS.map((loc) => (
                 <option key={loc.name} value={loc.name}>
                   {loc.name}
@@ -204,12 +204,13 @@ export default function WeatherForecast() {
               type="button"
               onClick={detectLocationAndFetch}
               title="Refresh GPS location"
-              className="p-1.5 hover:bg-primary-50 rounded-lg text-primary-700 transition-colors"
+              className="p-1.5 hover:bg-primary-50 rounded-lg text-primary-700 transition-colors flex-shrink-0"
             >
               <RefreshCw size={16} />
             </button>
           </div>
         </div>
+
 
         {/* Location Banner Bar */}
         <div className="mb-6 p-4 rounded-xl bg-white/90 border border-primary-100/80 shadow-sm flex flex-wrap items-center justify-between gap-3">

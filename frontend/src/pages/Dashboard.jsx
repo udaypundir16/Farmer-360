@@ -24,8 +24,14 @@ import {
   Star,
   ChevronLeft,
   ChevronRight,
-  Wheat
+  Wheat,
+  Bot,
+  Store,
+  Bell,
+  CloudSun,
+  ShoppingBag
 } from 'lucide-react';
+
 import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
@@ -67,8 +73,9 @@ export default function Dashboard() {
       className="min-h-screen bg-fixed bg-center bg-no-repeat bg-cover relative"
       style={{ backgroundImage: "url('/images/dashboard_bg.jpg')" }}
     >
-      {/* Fully transparent overlay so background artwork displays clearly */}
-      <div className="absolute inset-0 bg-white/5 pointer-events-none" />
+      {/* Soft overlay to decrease background image opacity for optimal readability */}
+      <div className="absolute inset-0 bg-cream-50/75 backdrop-blur-[1px] pointer-events-none" />
+
 
       <div className="container mx-auto px-4 py-8 relative z-10 max-w-7xl">
         
@@ -174,6 +181,144 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
+
+
+        {/* ========================================================================= */}
+        {/* MOBILE QUICK ACCESS SERVICES HUB (VISIBLE ONLY ON MOBILE / TABLET) */}
+        {/* ========================================================================= */}
+        <section className="mb-8 block lg:hidden">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 className="text-base font-extrabold text-primary-950 flex items-center gap-2">
+              <Star size={16} className="text-gold-500 fill-gold-500" />
+              <span>All Farm Services</span>
+            </h2>
+
+            <span className="text-[11px] font-bold text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full border border-primary-100">
+              Quick Access
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            <Link
+              to="/ai-chat"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-gradient-to-br from-emerald-600 to-primary-700 text-white shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <Bot size={18} className="text-yellow-300" />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs">AI Farm Advisor</p>
+                <p className="text-[10px] text-emerald-100 font-medium">Instant answers & voice</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/markets"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center">
+                <Store size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Live Mandi</p>
+                <p className="text-[10px] text-gray-500 font-medium">500+ Daily rates</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/weather-forecast"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                <CloudSun size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Weather</p>
+                <p className="text-[10px] text-gray-500 font-medium">Rain & spray advice</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/schemes"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <Sprout size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Govt Schemes</p>
+                <p className="text-[10px] text-gray-500 font-medium">Subsidies & loans</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/shipments"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <Truck size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Shipments</p>
+                <p className="text-[10px] text-gray-500 font-medium">Logistics tracking</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/profit-calculator"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <DollarSign size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Profit Calc</p>
+                <p className="text-[10px] text-gray-500 font-medium">Yield & ROI</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/crop-market"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+
+            >
+              <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
+                <ShoppingBag size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Trade Market</p>
+                <p className="text-[10px] text-gray-500 font-medium">Buy & sell crops</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/community-forum"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+                <MessageSquare size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Community</p>
+                <p className="text-[10px] text-gray-500 font-medium">Farmer Q&A</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/crop-calendar"
+              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                <Calendar size={18} />
+              </div>
+              <div>
+                <p className="font-extrabold text-xs text-soil-dark">Crop Calendar</p>
+                <p className="text-[10px] text-gray-500 font-medium">Sowing schedule</p>
+              </div>
+            </Link>
+          </div>
+        </section>
+
 
 
         {/* ========================================================================= */}

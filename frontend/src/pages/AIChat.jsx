@@ -124,8 +124,9 @@ export default function AIChat() {
           )}
         </div>
 
-        <div className="flex flex-col h-[calc(100vh-14rem)] max-w-4xl mx-auto rounded-agri-lg shadow-agri-lg bg-white/90 backdrop-blur-sm border border-primary-100 overflow-hidden">
-          <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth">
+        <div className="flex flex-col h-[calc(100dvh-12rem)] sm:h-[calc(100vh-14rem)] max-w-4xl mx-auto rounded-agri-lg shadow-agri-lg bg-white/95 backdrop-blur-sm border border-primary-100 overflow-hidden">
+          <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 scroll-smooth">
+
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full min-h-[280px] text-center">
                 <div className="p-4 rounded-full bg-primary-50 border border-primary-100 mb-4">

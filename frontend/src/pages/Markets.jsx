@@ -62,30 +62,31 @@ export default function Markets() {
 
   return (
     <div className="min-h-screen bg-transparent py-8">
-      <div className="container mx-auto p-4">
-        <div className="mb-8 animate-fade-in-up flex justify-between items-start">
+      <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
+        <div className="mb-6 sm:mb-8 animate-fade-in-up flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-2 text-primary-800">
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold mb-1.5 text-primary-800">
               {t('markets.title')}
             </h1>
-            <p className="text-soil-light text-lg">{t('markets.subtitle')}</p>
+            <p className="text-soil-light text-sm sm:text-base md:text-lg">{t('markets.subtitle')}</p>
             {lastUpdated && (
-              <p className="text-soil-light/70 text-sm mt-2">Last updated: {lastUpdated}</p>
+              <p className="text-soil-light/70 text-xs sm:text-sm mt-1.5">Last updated: {lastUpdated}</p>
             )}
           </div>
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-700 text-white rounded-xl hover:bg-primary-800 transition shadow-sm disabled:opacity-50 text-sm font-bold w-full sm:w-auto min-h-[44px]"
           >
-            <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
-            {refreshing ? 'Refreshing...' : 'Refresh'}
+            <RefreshCw size={17} className={refreshing ? 'animate-spin' : ''} />
+            <span>{refreshing ? 'Refreshing...' : 'Refresh Prices'}</span>
           </button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="card-agri p-6 flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="card-agri p-4 sm:p-6 flex items-center justify-between">
+
             <div>
               <p className="text-sm font-semibold text-soil-light">{t('markets.total_commodities')}</p>
               <p className="text-3xl font-bold text-primary-700">{filteredPrices.length}</p>

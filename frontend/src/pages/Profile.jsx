@@ -146,8 +146,9 @@ export default function Profile() {
               </TabsTrigger>
             </TabsList>
 
-            <div className="p-6 md:p-8 bg-cream-50/50">
+            <div className="p-3.5 sm:p-6 md:p-8 bg-cream-50/50">
               <TabsContent value="edit" className="animate-in fade-in duration-300 mt-0">
+
                 <EditProfile user={user} />
               </TabsContent>
               <TabsContent value="password" className="animate-in fade-in duration-300 mt-0">

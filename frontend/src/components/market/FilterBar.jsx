@@ -6,8 +6,8 @@ export default function FilterBar({ filters, setFilters }) {
   };
 
   return (
-    <div className="flex flex-wrap gap-4 p-4 rounded-agri-lg glass border border-primary-100/50">
-      <div className="flex-1 min-w-[200px]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-3.5 sm:p-4 rounded-agri-lg glass border border-primary-100/50 w-full">
+      <div className="w-full">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-500" size={18} />
           <input
@@ -16,7 +16,7 @@ export default function FilterBar({ filters, setFilters }) {
             placeholder="Search commodity..."
             value={filters.commodity}
             onChange={handleChange}
-            className="w-full pl-10 pr-4 py-2.5 form-input-agri rounded-lg border-primary-100 focus:ring-primary-500/20"
+            className="w-full pl-10 pr-4 py-2.5 form-input-agri rounded-xl border border-primary-200 focus:ring-primary-500/20 text-sm"
           />
         </div>
       </div>
@@ -24,7 +24,7 @@ export default function FilterBar({ filters, setFilters }) {
         name="state"
         value={filters.state}
         onChange={handleChange}
-        className="form-input-agri rounded-lg px-4 py-2.5 min-w-[160px]"
+        className="form-input-agri rounded-xl px-4 py-2.5 w-full border border-primary-200 text-sm cursor-pointer"
       >
         <option value="">All States</option>
         <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -47,11 +47,12 @@ export default function FilterBar({ filters, setFilters }) {
       <input
         type="text"
         name="market"
-        placeholder="Market name"
+        placeholder="Filter by Mandi / Market..."
         value={filters.market}
         onChange={handleChange}
-        className="form-input-agri rounded-lg px-4 py-2.5 min-w-[140px]"
+        className="form-input-agri rounded-xl px-4 py-2.5 w-full border border-primary-200 text-sm"
       />
     </div>
   );
 }
+

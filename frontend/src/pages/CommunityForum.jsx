@@ -297,21 +297,21 @@ export default function CommunityForum() {
         )}
 
         {/* Controls */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 text-soil-light" size={20} />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-soil-light" size={18} />
             <input
               type="text"
               placeholder={t('forum.search_discussions')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-primary-200 rounded-agri bg-white focus:outline-none focus:border-primary-500"
+              className="w-full pl-10 pr-4 py-2.5 border border-primary-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-sm"
             />
           </div>
           <select
             value={selectedCrop}
             onChange={(e) => setSelectedCrop(e.target.value)}
-            className="px-4 py-2 border border-primary-200 rounded-agri bg-white focus:outline-none focus:border-primary-500"
+            className="px-4 py-2.5 border border-primary-200 rounded-xl bg-white focus:outline-none text-sm cursor-pointer w-full sm:w-auto min-w-[140px]"
           >
             <option value="">{t('cropcalendar.all_crops')}</option>
             {cropTags.map((crop) => (
@@ -322,12 +322,13 @@ export default function CommunityForum() {
           </select>
           <Button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-agri hover:bg-primary-700"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-700 text-white rounded-xl hover:bg-primary-800 font-bold text-sm shadow-sm w-full sm:w-auto min-h-[44px]"
           >
-            <Plus size={20} />
-            {t('forum.ask_question')}
+            <Plus size={18} />
+            <span>{t('forum.ask_question')}</span>
           </Button>
         </div>
+
 
         {/* Create Post Form */}
         {showCreateForm && (

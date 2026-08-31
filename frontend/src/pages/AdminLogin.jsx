@@ -43,7 +43,8 @@ export default function AdminLogin() {
       style={{ backgroundImage: "url('/images/page_bg.jpg')" }}
     >
       {/* Soft Backdrop Overlay */}
-      <div className="absolute inset-0 bg-cream-100/30 backdrop-blur-[2px] pointer-events-none" />
+      <div className="absolute inset-0 bg-cream-100/70 backdrop-blur-[2px] pointer-events-none" />
+
 
       <div className="max-w-md w-full space-y-6 relative z-10 animate-fade-in-up">
         {/* Logo Header */}
