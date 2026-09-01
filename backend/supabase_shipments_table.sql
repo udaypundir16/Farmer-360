@@ -1,5 +1,3 @@
--- Shipments table for Smart Agriculture platform
--- Run this in Supabase SQL Editor: https://supabase.com/dashboard/project/vcajepqvzfihmxvyprre/sql/new
 
 CREATE TABLE IF NOT EXISTS shipments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

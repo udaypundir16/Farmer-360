@@ -1,5 +1,3 @@
--- Price Alerts table for Smart Agriculture platform
--- Run this in Supabase SQL Editor
 
 CREATE TABLE IF NOT EXISTS price_alerts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
