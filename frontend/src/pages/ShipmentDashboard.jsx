@@ -286,43 +286,43 @@ const ShipmentDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('forum.all_topics')}</p>
-            <p className="text-2xl sm:text-3xl font-bold text-gray-800">{stats.total}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
+          <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-3.5 sm:p-4">
+            <p className="text-gray-500 text-xs sm:text-sm font-bold uppercase tracking-wider">{t('forum.all_topics')}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-soil-dark mt-0.5">{stats.total}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.create_shipment')}</p>
-            <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.created}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-3.5 sm:p-4">
+            <p className="text-gray-500 text-xs sm:text-sm font-bold uppercase tracking-wider">{t('shipments.create_shipment')}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-blue-600 mt-0.5">{stats.created}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_dispatched')}</p>
-            <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.pickedUp}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-3.5 sm:p-4">
+            <p className="text-gray-500 text-xs sm:text-sm font-bold uppercase tracking-wider">{t('shipments.status_dispatched')}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-amber-600 mt-0.5">{stats.pickedUp}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_in_transit')}</p>
-            <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.inTransit}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-3.5 sm:p-4">
+            <p className="text-gray-500 text-xs sm:text-sm font-bold uppercase tracking-wider">{t('shipments.status_in_transit')}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-purple-600 mt-0.5">{stats.inTransit}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4 col-span-2 sm:col-span-1">
-            <p className="text-gray-600 text-xs sm:text-sm font-medium">{t('shipments.status_delivered')}</p>
-            <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.delivered}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-3.5 sm:p-4 col-span-2 sm:col-span-1">
+            <p className="text-gray-500 text-xs sm:text-sm font-bold uppercase tracking-wider">{t('shipments.status_delivered')}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-0.5">{stats.delivered}</p>
           </div>
         </div>
 
         {/* Search and Filter Section */}
-        <div className="bg-white rounded-lg shadow p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+        <div className="bg-white rounded-xl shadow-sm border border-primary-100 p-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder={`${t('common.search')} ${t('shipments.shipment_id')} / ${t('crop_market.crop_name')}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base font-medium"
               />
             </div>
 
@@ -330,7 +330,7 @@ const ShipmentDashboard = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base font-medium bg-white cursor-pointer"
             >
               <option value="all">{t('forum.all_topics')}</option>
               <option value="created">{t('shipments.create_shipment')}</option>
@@ -339,47 +339,54 @@ const ShipmentDashboard = () => {
               <option value="delivered">{t('shipments.status_delivered')}</option>
             </select>
           </div>
-          <p className="text-sm text-gray-600">
-            {filteredShipments.length} / {shipments.length} {t('shipments.title')}
+          <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-1">
+            Showing {filteredShipments.length} of {shipments.length} {t('shipments.title')}
           </p>
         </div>
 
-        {/* Three-Column Layout: List + Details + Timeline */}
+        {/* Layout: List + Details + Timeline */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Shipments List - Left Column */}
           <div className="lg:col-span-4">
             {loading ? (
-              <div className="flex justify-center items-center h-64">
+              <div className="flex justify-center items-center h-64 bg-white rounded-xl border border-primary-100">
                 <div className="text-center">
-                  <Loader className="w-8 h-8 text-green-600 animate-spin mx-auto mb-2" />
-                  <p className="text-gray-600">{t('common.loading')}</p>
+                  <Loader className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-2" />
+                  <p className="text-gray-600 font-medium">{t('common.loading')}</p>
                 </div>
               </div>
             ) : filteredShipments.length > 0 ? (
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                 {filteredShipments.map((shipment) => (
                   <div
                     key={shipment.shipmentId}
-                    onClick={() => handleViewShipment(shipment.shipmentId)}
-                    className={`cursor-pointer rounded-lg p-3 border-2 transition ${selectedShipmentId === shipment.shipmentId
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 bg-white hover:border-green-300'
+                    onClick={() => {
+                      handleViewShipment(shipment.shipmentId);
+                      if (window.innerWidth < 1024) {
+                        setTimeout(() => {
+                          document.getElementById('shipment-details-section')?.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                      }
+                    }}
+                    className={`cursor-pointer rounded-2xl p-4 border-2 transition-all shadow-xs ${selectedShipmentId === shipment.shipmentId
+                      ? 'border-primary-600 bg-primary-50/60 ring-2 ring-primary-500/20'
+                      : 'border-gray-200 bg-white hover:border-primary-300'
                       }`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-2">
                       <div>
-                        <p className="font-semibold text-gray-800">{shipment.shipmentId}</p>
-                        <p className="text-xs text-gray-600">{shipment.cropType}</p>
-                        <p className="text-xs text-gray-500 mt-1">{shipment.quantity} kg</p>
+                        <p className="font-bold text-base text-soil-dark tracking-tight">{shipment.shipmentId}</p>
+                        <p className="text-sm font-semibold text-primary-800 mt-0.5">{shipment.cropType}</p>
+                        <p className="text-xs sm:text-sm text-gray-500 font-medium mt-1">{shipment.quantity} kg • {shipment.vehicleNumber || 'Standard Freight'}</p>
                       </div>
                       <span
-                        className={`px-2 py-1 rounded text-xs font-semibold ${shipment.status === 'created'
-                          ? 'bg-yellow-100 text-yellow-800'
+                        className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap border ${shipment.status === 'created'
+                          ? 'bg-yellow-100 text-yellow-900 border-yellow-300'
                           : shipment.status === 'picked_up'
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'bg-blue-100 text-blue-900 border-blue-300'
                             : shipment.status === 'in_transit'
-                              ? 'bg-purple-100 text-purple-800'
-                              : 'bg-green-100 text-green-800'
+                              ? 'bg-purple-100 text-purple-900 border-purple-300'
+                              : 'bg-emerald-100 text-emerald-900 border-emerald-300'
                           }`}
                       >
                         {shipment.status.replace('_', ' ')}
@@ -389,72 +396,76 @@ const ShipmentDashboard = () => {
                 ))}
               </div>
             ) : (
-              <div className="bg-gray-50 rounded-lg p-8 text-center">
-                <Truck className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-600">No shipments found</p>
+              <div className="bg-white rounded-xl border border-primary-100 p-8 text-center">
+                <Truck className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+                <p className="text-base font-bold text-soil-dark">No shipments found</p>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">Create a new shipment to start tracking freight.</p>
               </div>
             )}
           </div>
 
           {/* Shipment Details - Middle Column */}
-          {selectedShipment ? (
-            <div className="lg:col-span-4">
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-xl font-bold mb-4">Shipment Details</h3>
+          <div id="shipment-details-section" className="lg:col-span-4">
+            {selectedShipment ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-primary-100 p-5 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-extrabold text-soil-dark mb-4 pb-2 border-b border-primary-100">Shipment Details</h3>
 
-                <div className="space-y-3 text-sm">
+                <div className="space-y-3.5 text-sm sm:text-base">
                   <div>
-                    <p className="text-gray-600">Shipment ID</p>
-                    <p className="font-semibold text-gray-800">{selectedShipment.shipmentId}</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Shipment ID</p>
+                    <p className="font-extrabold text-soil-dark text-base">{selectedShipment.shipmentId}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Crop Type</p>
+                      <p className="font-bold text-primary-900 text-base">{selectedShipment.cropType}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Quantity</p>
+                      <p className="font-bold text-soil-dark text-base">{selectedShipment.quantity} kg</p>
+                    </div>
                   </div>
 
                   <div>
-                    <p className="text-gray-600">Crop Type</p>
-                    <p className="font-semibold text-gray-800">{selectedShipment.cropType}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-gray-600">Quantity</p>
-                    <p className="font-semibold text-gray-800">{selectedShipment.quantity} kg</p>
-                  </div>
-
-                  <div>
-                    <p className="text-gray-600">Status</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Status</p>
                     <p
-                      className={`font-semibold inline-block px-2 py-1 rounded text-xs mt-1 ${selectedShipment.status === 'created'
-                        ? 'bg-yellow-100 text-yellow-800'
+                      className={`font-bold inline-block px-3 py-1 rounded-full text-xs uppercase tracking-wider mt-1 border ${selectedShipment.status === 'created'
+                        ? 'bg-yellow-100 text-yellow-900 border-yellow-300'
                         : selectedShipment.status === 'picked_up'
-                          ? 'bg-blue-100 text-blue-800'
+                          ? 'bg-blue-100 text-blue-900 border-blue-300'
                           : selectedShipment.status === 'in_transit'
-                            ? 'bg-purple-100 text-purple-800'
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-purple-100 text-purple-900 border-purple-300'
+                            : 'bg-emerald-100 text-emerald-900 border-emerald-300'
                         }`}
                     >
                       {selectedShipment.status.replace('_', ' ').toUpperCase()}
                     </p>
                   </div>
 
-                  <div>
-                    <p className="text-gray-600">Driver</p>
-                    <p className="font-semibold text-gray-800">
-                      {selectedShipment.driverName || 'Not assigned'}
-                    </p>
-                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Driver</p>
+                      <p className="font-semibold text-soil-dark">
+                        {selectedShipment.driverName || 'Not assigned'}
+                      </p>
+                    </div>
 
-                  <div>
-                    <p className="text-gray-600">Vehicle</p>
-                    <p className="font-semibold text-gray-800">
-                      {selectedShipment.vehicleNumber} ({selectedShipment.vehicleType || 'N/A'})
-                    </p>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Vehicle</p>
+                      <p className="font-semibold text-soil-dark">
+                        {selectedShipment.vehicleNumber} ({selectedShipment.vehicleType || 'N/A'})
+                      </p>
+                    </div>
                   </div>
 
                   {selectedShipment.currentLocation && (
-                    <div>
-                      <p className="text-gray-600">Current Location</p>
-                      <p className="font-semibold text-gray-800">
-                        {selectedShipment.currentLocation.address || 'GPS Update'}
+                    <div className="p-3 rounded-xl bg-cream-50 border border-primary-100/60">
+                      <p className="text-xs font-bold text-primary-800 uppercase tracking-wider">Current Location</p>
+                      <p className="font-bold text-soil-dark text-sm mt-0.5">
+                        {selectedShipment.currentLocation.address || 'GPS Live Tracking'}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs font-mono text-gray-500 mt-0.5">
                         Lat: {selectedShipment.currentLocation.latitude?.toFixed(4)}, Lng:{' '}
                         {selectedShipment.currentLocation.longitude?.toFixed(4)}
                       </p>
@@ -462,8 +473,8 @@ const ShipmentDashboard = () => {
                   )}
 
                   <div>
-                    <p className="text-gray-600">Created</p>
-                    <p className="font-semibold text-gray-800">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Created Date</p>
+                    <p className="font-semibold text-soil-dark">
                       {new Date(selectedShipment.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -472,56 +483,64 @@ const ShipmentDashboard = () => {
                 {selectedShipment.status !== 'delivered' && (
                   <button
                     onClick={() => handleInitiateStatusUpdate(selectedShipmentId)}
-                    className="w-full mt-4 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-medium"
+                    className="w-full mt-5 bg-primary-700 hover:bg-primary-800 text-white py-3 rounded-xl transition-all font-bold text-sm sm:text-base shadow-md"
                   >
                     Update Status
                   </button>
                 )}
               </div>
-            </div>
-          ) : (
-            <div className="lg:col-span-4 bg-gray-50 rounded-lg p-8 text-center">
-              <Eye className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-600">Select a shipment to view details</p>
-            </div>
-          )}
+            ) : (
+              <div className="bg-white rounded-2xl border border-primary-100 p-8 text-center">
+                <Eye className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+                <p className="text-base font-bold text-soil-dark">Select a shipment to view details</p>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">Tap any shipment from the list on the left.</p>
+              </div>
+            )}
+          </div>
 
           {/* Timeline - Right Column */}
-          {selectedShipment ? (
-            <div className="lg:col-span-4">
+          <div className="lg:col-span-4">
+            {selectedShipment ? (
               <ShipmentTimeline timeline={selectedShipment.timeline || []} shipmentId={selectedShipmentId} />
-            </div>
-          ) : (
-            <div className="lg:col-span-4" />
-          )}
+            ) : (
+              <div className="hidden lg:block bg-white/50 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-gray-400 text-sm">
+                Timeline will appear here
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Modals */}
       {showForm && (
         <div
-          className="fixed inset-x-0 bottom-0 top-[112px] z-40 overflow-y-auto bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => e.target === e.currentTarget && setShowForm(false)}
         >
-          <div className="min-h-full flex items-start justify-center p-6">
-            <div className="w-full max-w-2xl my-4">
-              <ShipmentForm
-                onSubmit={handleCreateShipment}
-                onCancel={() => setShowForm(false)}
-                loading={submitting}
-              />
-            </div>
+          <div className="w-full max-w-2xl my-auto">
+            <ShipmentForm
+              onSubmit={handleCreateShipment}
+              onCancel={() => setShowForm(false)}
+              loading={submitting}
+            />
           </div>
         </div>
       )}
 
       {showStatusUpdate && selectedShipment && (
-        <ShipmentStatusUpdate
-          shipment={selectedShipment}
-          onSubmit={handleUpdateStatus}
-          onCancel={() => setShowStatusUpdate(false)}
-          loading={submitting}
-        />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto"
+          onClick={(e) => e.target === e.currentTarget && setShowStatusUpdate(false)}
+        >
+          <div className="w-full max-w-lg my-auto">
+            <ShipmentStatusUpdate
+              shipment={selectedShipment}
+              onSubmit={handleUpdateStatus}
+              onCancel={() => setShowStatusUpdate(false)}
+              loading={submitting}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
