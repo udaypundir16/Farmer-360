@@ -184,136 +184,144 @@ export default function Dashboard() {
 
 
         {/* ========================================================================= */}
-        {/* MOBILE QUICK ACCESS SERVICES HUB (VISIBLE ONLY ON MOBILE / TABLET) */}
+        {/* MOBILE QUICK ACCESS SERVICES HUB (VISIBLE ON MOBILE / TABLET) */}
         {/* ========================================================================= */}
         <section className="mb-8 block lg:hidden">
-          <div className="flex items-center justify-between mb-3 px-1">
-            <h2 className="text-base font-extrabold text-primary-950 flex items-center gap-2">
-              <Star size={16} className="text-gold-500 fill-gold-500" />
+          <div className="flex items-center justify-between mb-4 px-1">
+            <h2 className="text-lg sm:text-xl font-extrabold text-primary-950 flex items-center gap-2">
+              <Star size={18} className="text-gold-500 fill-gold-500" />
               <span>All Farm Services</span>
             </h2>
 
-            <span className="text-[11px] font-bold text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full border border-primary-100">
+            <span className="text-xs font-bold text-primary-700 bg-primary-50 px-3 py-1 rounded-full border border-primary-100">
               Quick Access
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* AI Advisor Card */}
             <Link
               to="/ai-chat"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-gradient-to-br from-emerald-600 to-primary-700 text-white shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-gradient-to-r from-emerald-700 via-primary-700 to-primary-800 text-white shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <Bot size={18} className="text-yellow-300" />
-              </div>
               <div>
-                <p className="font-extrabold text-xs">AI Farm Advisor</p>
-                <p className="text-[10px] text-emerald-100 font-medium">Instant answers & voice</p>
+                <p className="font-extrabold text-base sm:text-lg text-white tracking-tight">AI Farm Advisor</p>
+                <p className="text-xs sm:text-sm text-emerald-100 font-medium mt-0.5">Instant answers & voice</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0 shadow-inner">
+                <Bot size={24} className="text-yellow-300" />
               </div>
             </Link>
 
+            {/* Live Mandi Card */}
             <Link
               to="/markets"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center">
-                <Store size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Live Mandi</p>
-                <p className="text-[10px] text-gray-500 font-medium">500+ Daily rates</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Live Mandi</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">500+ Daily rates</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-inner">
+                <Store size={22} />
               </div>
             </Link>
 
+            {/* Weather Card */}
             <Link
               to="/weather-forecast"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-                <CloudSun size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Weather</p>
-                <p className="text-[10px] text-gray-500 font-medium">Rain & spray advice</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Weather</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Rain & spray advice</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 shadow-inner">
+                <CloudSun size={22} />
               </div>
             </Link>
 
+            {/* Govt Schemes Card */}
             <Link
               to="/schemes"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                <Sprout size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Govt Schemes</p>
-                <p className="text-[10px] text-gray-500 font-medium">Subsidies & loans</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Govt Schemes</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Subsidies & loans</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 shadow-inner">
+                <Sprout size={22} />
               </div>
             </Link>
 
+            {/* Shipments Card */}
             <Link
               to="/shipments"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                <Truck size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Shipments</p>
-                <p className="text-[10px] text-gray-500 font-medium">Logistics tracking</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Shipments</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Logistics tracking</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 shadow-inner">
+                <Truck size={22} />
               </div>
             </Link>
 
+            {/* Profit Calculator Card */}
             <Link
               to="/profit-calculator"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <DollarSign size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Profit Calc</p>
-                <p className="text-[10px] text-gray-500 font-medium">Yield & ROI</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Profit Calc</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Yield & ROI</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-inner">
+                <DollarSign size={22} />
               </div>
             </Link>
 
+            {/* Trade Market Card */}
             <Link
               to="/crop-market"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
-
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
-                <ShoppingBag size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Trade Market</p>
-                <p className="text-[10px] text-gray-500 font-medium">Buy & sell crops</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Trade Market</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Buy & sell crops</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center shrink-0 shadow-inner">
+                <ShoppingBag size={22} />
               </div>
             </Link>
 
+            {/* Community Forum Card */}
             <Link
               to="/community-forum"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
-                <MessageSquare size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Community</p>
-                <p className="text-[10px] text-gray-500 font-medium">Farmer Q&A</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Community</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Farmer Q&A</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 shadow-inner">
+                <MessageSquare size={22} />
               </div>
             </Link>
 
+            {/* Crop Calendar Card */}
             <Link
               to="/crop-calendar"
-              className="flex flex-col justify-between p-3.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm active:scale-98 transition-all min-h-[96px]"
+              className="flex items-center justify-between p-4 sm:p-4.5 rounded-2xl bg-white/95 border border-primary-100 shadow-sm hover:shadow-md active:scale-[0.99] transition-all"
             >
-              <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-                <Calendar size={18} />
-              </div>
               <div>
-                <p className="font-extrabold text-xs text-soil-dark">Crop Calendar</p>
-                <p className="text-[10px] text-gray-500 font-medium">Sowing schedule</p>
+                <p className="font-extrabold text-base sm:text-lg text-soil-dark tracking-tight">Crop Calendar</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">Sowing schedule</p>
+              </div>
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 shadow-inner">
+                <Calendar size={22} />
               </div>
             </Link>
           </div>

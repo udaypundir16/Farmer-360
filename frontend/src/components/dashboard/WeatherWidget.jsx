@@ -90,13 +90,17 @@ export default function WeatherWidget({ location }) {
   const Icon = iconMap[weather.condition] || Sun;
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between p-1">
       <div>
-        <p className="text-2xl font-bold">{weather.temp}°C</p>
-        <p className="text-gray-600 text-sm">{weather.condition}</p>
-        <p className="text-xs text-gray-500">Humidity: {weather.humidity}%</p>
+        <p className="text-3xl sm:text-4xl font-extrabold text-soil-dark">{weather.temp}°C</p>
+        <p className="text-base sm:text-lg font-semibold text-primary-900 mt-0.5">{weather.condition}</p>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium mt-1">
+          Humidity: <span className="font-bold text-soil">{weather.humidity}%</span> • Wind: <span className="font-bold text-soil">{weather.windSpeed || 12} km/h</span>
+        </p>
       </div>
-      <Icon size={48} className="text-yellow-500" />
+      <div className="p-3 rounded-2xl bg-amber-50 text-amber-500 shadow-inner">
+        <Icon size={44} className="animate-pulse" />
+      </div>
     </div>
   );
 }

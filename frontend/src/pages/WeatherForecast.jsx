@@ -299,23 +299,23 @@ export default function WeatherForecast() {
 
 
         {/* Forecast Days */}
-        <div className="forecast-grid grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="forecast-grid grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 mb-6">
           {forecast.forecast.map((day, idx) => {
             const Icon = getWeatherIcon(day.condition);
             return (
               <button
                 key={idx}
                 onClick={() => setSelectedDay(idx)}
-                className={`forecast-day p-4 rounded-xl transition-all ${
+                className={`forecast-day p-4 rounded-2xl transition-all ${
                   selectedDay === idx
-                    ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg scale-105'
-                    : 'bg-white hover:bg-gray-50 border border-gray-200'
+                    ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg scale-102 border-transparent'
+                    : 'bg-white hover:bg-gray-50 border border-gray-200 text-soil'
                 }`}
               >
-                <p className="text-sm font-medium mb-2">{day.day}</p>
-                <Icon size={32} className="mx-auto mb-2" />
-                <p className="text-2xl font-bold">{day.temp}°C</p>
-                <p className={`text-xs mt-1 ${selectedDay === idx ? 'text-blue-100' : 'text-gray-600'}`}>
+                <p className="text-sm sm:text-base font-bold mb-2">{day.day}</p>
+                <Icon size={36} className="mx-auto mb-2" />
+                <p className="text-2xl sm:text-3xl font-extrabold">{day.temp}°C</p>
+                <p className={`text-xs sm:text-sm font-semibold mt-1 capitalize ${selectedDay === idx ? 'text-blue-100' : 'text-gray-600'}`}>
                   {day.condition}
                 </p>
               </button>
@@ -324,46 +324,53 @@ export default function WeatherForecast() {
         </div>
 
         {/* Detailed Forecast */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Detailed Forecast - {selectedForecast.day}</CardTitle>
+        <Card className="rounded-agri-xl border-primary-100 shadow-sm overflow-hidden bg-white/95">
+          <CardHeader className="pb-3 border-b border-primary-100/50 bg-cream-50/50">
+            <CardTitle className="text-lg sm:text-xl font-bold text-soil">
+              Detailed Forecast — <span className="text-primary-700">{selectedForecast.day}</span>
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="details-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 rounded-lg bg-gradient-to-br from-yellow-50 to-orange-50">
-                <div className="flex items-center gap-2 mb-2">
+          <CardContent className="pt-5">
+            <div className="details-grid grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-orange-50 border border-orange-100">
+                <div className="flex items-center gap-2 mb-1.5">
                   <Thermometer size={20} className="text-orange-600" />
-                  <span className="font-semibold">Temperature</span>
+                  <span className="font-bold text-xs sm:text-sm text-soil-dark">Temperature</span>
                 </div>
-                <p className="text-2xl font-bold text-orange-700">{selectedForecast.temp}°C</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-orange-700">{selectedForecast.temp}°C</p>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
+                <div className="flex items-center gap-2 mb-1.5">
                   <Droplets size={20} className="text-blue-600" />
-                  <span className="font-semibold">Humidity</span>
+                  <span className="font-bold text-xs sm:text-sm text-soil-dark">Humidity</span>
                 </div>
-                <p className="text-2xl font-bold text-blue-700">{selectedForecast.humidity}%</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-blue-700">{selectedForecast.humidity}%</p>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-gray-50 to-slate-50">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-gray-50 to-slate-100 border border-gray-200">
+                <div className="flex items-center gap-2 mb-1.5">
                   <Wind size={20} className="text-gray-600" />
-                  <span className="font-semibold">Wind Speed</span>
+                  <span className="font-bold text-xs sm:text-sm text-soil-dark">Wind Speed</span>
                 </div>
-                <p className="text-2xl font-bold text-gray-700">{selectedForecast.windSpeed} km/h</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-gray-800">{selectedForecast.windSpeed} km/h</p>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
+                <div className="flex items-center gap-2 mb-1.5">
                   <CloudRain size={20} className="text-purple-600" />
-                  <span className="font-semibold">Rain Chance</span>
+                  <span className="font-bold text-xs sm:text-sm text-soil-dark">Rain Chance</span>
                 </div>
-                <p className="text-2xl font-bold text-purple-700">{selectedForecast.rainChance}%</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-purple-700">{selectedForecast.rainChance}%</p>
               </div>
             </div>
 
             {/* Farming Recommendations */}
-            <div className="mt-6 p-4 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200">
-              <h3 className="font-semibold text-green-800 mb-2">🌾 Farming Recommendations</h3>
-              <ul className="space-y-1 text-sm text-green-700">
+            <div className="mt-6 p-5 rounded-xl bg-gradient-to-br from-green-50/90 to-emerald-50 border border-green-200 shadow-xs">
+              <h3 className="font-bold text-base sm:text-lg text-green-900 mb-2.5 flex items-center gap-2">
+                <span>🌾</span> Agricultural Advisory & Spray Window
+              </h3>
+              <p className="text-soil-dark text-sm sm:text-base leading-relaxed font-medium mb-3">
+                {selectedForecast.recommendation || 'Conditions are favorable for routine crop management, fertilizer application, and monitoring soil moisture.'}
+              </p>
+              <ul className="space-y-1.5 text-sm sm:text-base text-green-800 font-medium">
                 {selectedForecast.rainChance > 50 && (
                   <li>• Good time for irrigation and water management</li>
                 )}

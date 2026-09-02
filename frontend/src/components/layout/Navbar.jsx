@@ -200,10 +200,10 @@ export default function Navbar() {
 
             {/* Full Features Grid for Mobile */}
             <div className="pt-3">
-              <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider px-2 mb-2">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider px-2 mb-2.5">
                 Agricultural Services
               </p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {allFeatures.map((feature) => {
                   const Icon = feature.icon;
                   const isActive = location.pathname === feature.to;
@@ -212,28 +212,28 @@ export default function Navbar() {
                       key={feature.to}
                       to={feature.to}
                       onClick={() => setIsOpen(false)}
-                      className={`flex items-center gap-2.5 p-2.5 rounded-xl border transition-all ${
+                      className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                         isActive
                           ? 'bg-primary-50 border-primary-300 text-primary-900 font-bold shadow-sm'
                           : feature.highlight
-                          ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950 font-bold'
+                          ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950 font-bold'
                           : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-800 font-medium'
                       }`}
                     >
+                      <span className="text-sm font-bold text-soil-dark leading-tight pr-2">
+                        {feature.label}
+                      </span>
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner ${
                           isActive
                             ? 'bg-primary-700 text-white'
                             : feature.highlight
                             ? 'bg-emerald-600 text-white'
-                            : 'bg-cream-100 text-primary-800'
+                            : 'bg-primary-50 text-primary-800'
                         }`}
                       >
-                        <Icon size={16} />
+                        <Icon size={18} />
                       </div>
-                      <span className="text-xs leading-tight line-clamp-2">
-                        {feature.label}
-                      </span>
                     </Link>
                   );
                 })}
@@ -243,18 +243,18 @@ export default function Navbar() {
             {/* User Profile / Auth Actions */}
             <div className="mt-4 pt-4 border-t border-gray-200">
               {user ? (
-                <div className="flex items-center justify-between bg-primary-50/80 p-3 rounded-xl border border-primary-100">
+                <div className="flex items-center justify-between bg-primary-50/80 p-3.5 rounded-xl border border-primary-100">
                   <Link
                     to="/profile"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2.5"
+                    className="flex items-center gap-3"
                   >
-                    <div className="w-8 h-8 rounded-full bg-primary-700 text-white flex items-center justify-center font-bold text-xs">
+                    <div className="w-10 h-10 rounded-full bg-primary-700 text-white flex items-center justify-center font-bold text-sm shadow-sm">
                       {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-soil-dark">{user?.fullName || 'Farmer User'}</p>
-                      <p className="text-[10px] text-gray-500 font-medium">{user?.phone || 'Profile Settings'}</p>
+                      <p className="text-sm font-bold text-soil-dark">{user?.fullName || 'Farmer User'}</p>
+                      <p className="text-xs text-gray-500 font-medium">{user?.phone || 'Profile Settings'}</p>
                     </div>
                   </Link>
                   <Button
@@ -264,9 +264,9 @@ export default function Navbar() {
                       setIsOpen(false);
                       handleLogout();
                     }}
-                    className="text-earth-700 hover:bg-earth-100/50 rounded-lg px-2.5 py-1 text-xs font-bold flex items-center gap-1"
+                    className="text-earth-700 hover:bg-earth-100/50 rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-1.5"
                   >
-                    <LogOut size={15} />
+                    <LogOut size={16} />
                     <span>Logout</span>
                   </Button>
                 </div>
@@ -275,14 +275,14 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="text-center font-bold px-4 py-2.5 rounded-xl border-2 border-earth-400 text-earth-700 hover:bg-earth-50 transition-all text-xs"
+                    className="text-center font-bold px-4 py-3 rounded-xl border-2 border-earth-400 text-earth-700 hover:bg-earth-50 transition-all text-sm"
                   >
                     {t('common.login')}
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setIsOpen(false)}
-                    className="text-center font-bold px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 text-white shadow-agri transition-all text-xs"
+                    className="text-center font-bold px-4 py-3 rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 text-white shadow-agri transition-all text-sm"
                   >
                     {t('common.register')}
                   </Link>

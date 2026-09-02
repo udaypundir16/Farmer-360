@@ -23,25 +23,27 @@ export default function SchemeCard({ scheme }) {
     <Card className="group hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full bg-white rounded-agri-lg border border-primary-100 shadow-sm hover:shadow-agri">
       <div>
         <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
-          <CardTitle className="text-base md:text-lg font-bold text-soil line-clamp-2 leading-snug">
+          <CardTitle className="text-base sm:text-lg font-bold text-soil line-clamp-2 leading-snug">
             {scheme.name}
           </CardTitle>
-          <Badge className={`${style} border capitalize whitespace-nowrap text-xs`}>
+          <Badge className={`${style} border capitalize whitespace-nowrap text-xs sm:text-sm px-2.5 py-0.5 font-semibold`}>
             {scheme.category || 'General'}
           </Badge>
         </CardHeader>
-        <CardContent className="pt-0 space-y-2">
-          <p className="text-sm text-soil-light line-clamp-3 leading-relaxed">
+        <CardContent className="pt-0 space-y-2.5">
+          <p className="text-sm sm:text-base text-soil-light line-clamp-3 leading-relaxed">
             {scheme.description}
           </p>
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-soil-light/80">
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs sm:text-sm text-soil-light">
             {scheme.source && (
-              <span className="bg-primary-50 text-primary-700 font-medium px-2 py-0.5 rounded-full border border-primary-100">
+              <span className="bg-primary-50 text-primary-800 font-semibold px-2.5 py-1 rounded-full border border-primary-100">
                 {scheme.source}
               </span>
             )}
             {scheme.state_specific && (
-              <span>{scheme.state_specific}</span>
+              <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md font-medium">
+                {scheme.state_specific}
+              </span>
             )}
           </div>
         </CardContent>
@@ -55,15 +57,13 @@ export default function SchemeCard({ scheme }) {
         >
           <Button
             variant="outline"
-            size="sm"
-            className="w-full flex items-center justify-center gap-2 border-primary-200 text-primary-700 hover:bg-primary-50 font-medium transition-colors"
+            className="w-full py-2.5 flex items-center justify-center gap-2 border-primary-300 text-primary-800 hover:bg-primary-50 font-bold text-sm transition-colors shadow-xs"
           >
-            <span>{t('schemes.view_more', 'View More')}</span>
-            <ExternalLink size={14} />
+            <span>{t('schemes.view_details', 'View Guidelines & News')}</span>
+            <ExternalLink size={15} />
           </Button>
         </a>
       </CardFooter>
     </Card>
   );
 }
-

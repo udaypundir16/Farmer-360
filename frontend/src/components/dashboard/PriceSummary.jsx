@@ -3,8 +3,10 @@ import { getLatestPrices } from '../../services/market.service';
 import { Link } from 'react-router-dom';
 import { TrendingUp, TrendingDown, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 
 export default function PriceSummary({ state }) {
+  const { t } = useTranslation();
   const [prices, setPrices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,27 +42,28 @@ export default function PriceSummary({ state }) {
 
   return (
     <div>
-      <ul className="space-y-3 mb-3">
+      <ul className="space-y-2.5 mb-3">
         {prices.map(p => (
-          <li key={p.id} className="flex items-center justify-between p-2 rounded-lg bg-white/60 hover:bg-white transition-colors">
+          <li key={p.id} className="flex items-center justify-between p-2.5 rounded-xl bg-primary-50/50 border border-primary-100/50 hover:bg-white transition-colors">
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">{p.commodity}</span>
+                <span className="font-bold text-base text-soil-dark">{p.commodity}</span>
                 {p.trend === 'up' ? (
-                  <TrendingUp size={14} className="text-green-600" />
+                  <TrendingUp size={16} className="text-green-600" />
                 ) : (
-                  <TrendingDown size={14} className="text-red-600" />
+                  <TrendingDown size={16} className="text-red-600" />
                 )}
               </div>
-              <span className="text-xs text-gray-600">{p.market}</span>
+              <span className="text-xs sm:text-sm text-gray-500 font-medium">{p.market}</span>
             </div>
-            <span className="font-bold text-sm">₹{p.modal_price}</span>
+            <span className="font-extrabold text-base sm:text-lg text-primary-800">₹{p.modal_price}</span>
           </li>
         ))}
       </ul>
       <Link to="/markets">
-        <Button size="sm" variant="outline" className="w-full text-xs flex items-center justify-center gap-1">
-          View All Prices <ArrowRight size={12} />
+        <Button variant="outline" size="sm" className="w-full text-xs sm:text-sm font-semibold text-primary-700 border-primary-200 hover:bg-primary-50">
+          <span>{t('dashboard.view_all_prices', 'Explore Mandi Trends')}</span>
+          <ArrowRight size={14} className="ml-1" />
         </Button>
       </Link>
     </div>
