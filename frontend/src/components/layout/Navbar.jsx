@@ -76,13 +76,19 @@ export default function Navbar() {
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center group transition-transform duration-300 hover:scale-[1.02]"
+            className="flex items-center gap-2.5 sm:gap-3 group transition-transform duration-300 hover:scale-[1.02] py-1"
           >
-            <img
-              src="/images/farmer360_logo.png"
-              alt="Farmer-360 - Cultivating Completeness in Agriculture"
-              className="h-10 sm:h-14 w-auto object-contain py-1"
-            />
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-primary-900 via-primary-800 to-emerald-600 flex items-center justify-center text-white shadow-md shadow-primary-950/15 ring-2 ring-primary-500/20 group-hover:shadow-primary-700/25 transition-all duration-300 shrink-0">
+              <Sprout size={22} className="text-yellow-300 transform group-hover:rotate-6 transition-transform duration-300" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading text-2xl sm:text-[26px] font-black tracking-tight text-primary-950 leading-none">
+                Farmer<span className="text-primary-600">-360</span>
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-soil-light mt-1 leading-none">
+                Agricultural Intelligence
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

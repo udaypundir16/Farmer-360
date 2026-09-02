@@ -9,12 +9,13 @@ export default function Footer() {
     <footer className="bg-white border-t border-primary-100 mt-auto">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
-          <div className="flex items-center gap-2">
-            <img
-              src="/images/farmer360_logo.png"
-              alt="Farmer-360"
-              className="h-10 w-auto object-contain"
-            />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-900 via-primary-800 to-emerald-600 flex items-center justify-center text-white shadow-sm ring-1 ring-primary-500/20 shrink-0">
+              <Wheat size={18} className="text-yellow-300" />
+            </div>
+            <span className="font-heading text-xl font-extrabold tracking-tight text-primary-950">
+              Farmer<span className="text-primary-600">-360</span>
+            </span>
           </div>
           <p className="text-sm text-soil-light md:col-span-3 max-w-md">
             {t('footer.empower_note')}
