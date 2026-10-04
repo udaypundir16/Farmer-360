@@ -1,4 +1,6 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const cron = require('node-cron');
 const { supabase } = require('../src/config/database');
 const Parser = require('rss-parser');
 const parser = new Parser();
@@ -143,54 +145,112 @@ async function fetchSchemesFromNews() {
   }
 }
 
-async function seedSchemes() {
+async function syncGovtSchemes() {
   console.log('[Govt Schemes] Starting government schemes sync...');
   
-  // Fetch real schemes from Google News
-  const SCHEMES = await fetchSchemesFromNews();
-  
-  console.log(`[Govt Schemes] Syncing ${SCHEMES.length} schemes to database...`);
+  try {
+    // Fetch real schemes from Google News + core flagship schemes
+    const SCHEMES = await fetchSchemesFromNews();
+    if (!SCHEMES || SCHEMES.length === 0) {
+      console.log('[Govt Schemes] No schemes available to sync.');
+      return { inserted: 0, updated: 0, total: 0 };
+    }
+    
+    console.log(`[Govt Schemes] Syncing ${SCHEMES.length} schemes to database...`);
 
-  // Clean up any test data first
-  await supabase.from('schemes').delete().eq('name', 'ColTest');
-  await supabase.from('schemes').delete().eq('name', 'X');
+    // Clean up any test data first
+    await supabase.from('schemes').delete().eq('name', 'ColTest');
+    await supabase.from('schemes').delete().eq('name', 'X');
 
-  for (const scheme of SCHEMES) {
-    // Check if already exists by name
-    const { data: existing } = await supabase
-      .from('schemes')
-      .select('id')
-      .eq('name', scheme.name)
-      .limit(1);
+    let inserted = 0;
+    let updated = 0;
 
-    if (existing && existing.length > 0) {
-      // Update existing
-      const { error } = await supabase
-        .from('schemes')
-        .update(scheme)
-        .eq('id', existing[0].id);
+    for (const scheme of SCHEMES) {
+      try {
+        // Check if already exists by name
+        const { data: existing } = await supabase
+          .from('schemes')
+          .select('id')
+          .eq('name', scheme.name)
+          .limit(1);
 
-      if (error) {
-        console.error(`✗ Failed to update "${scheme.name}":`, error.message);
-      } else {
-        console.log(`↻ Updated: ${scheme.name}`);
-      }
-    } else {
-      // Insert new
-      const { error } = await supabase
-        .from('schemes')
-        .insert(scheme);
+        const now = new Date().toISOString();
 
-      if (error) {
-        console.error(`✗ Failed to insert "${scheme.name}":`, error.message);
-      } else {
-        console.log(`✓ Inserted: ${scheme.name}`);
+        if (existing && existing.length > 0) {
+          // Update existing
+          const { error } = await supabase
+            .from('schemes')
+            .update({
+              description: scheme.description,
+              category: scheme.category,
+              state_specific: scheme.state_specific,
+              news_link: scheme.news_link,
+              source: scheme.source,
+              updated_at: now
+            })
+            .eq('id', existing[0].id);
+
+          if (error) {
+            console.warn(`[Govt Schemes] Failed to update "${scheme.name}":`, error.message);
+          } else {
+            updated++;
+          }
+        } else {
+          // Insert new
+          const { error } = await supabase
+            .from('schemes')
+            .insert({
+              ...scheme,
+              created_at: now,
+              updated_at: now
+            });
+
+          if (error) {
+            console.warn(`[Govt Schemes] Failed to insert "${scheme.name}":`, error.message);
+          } else {
+            inserted++;
+          }
+        }
+      } catch (itemErr) {
+        console.warn(`[Govt Schemes] Error syncing scheme "${scheme.name}":`, itemErr.message);
       }
     }
-  }
 
-  console.log('\nDone! Seeding complete.');
-  process.exit(0);
+    console.log(`[Govt Schemes] ✓ Sync completed. Inserted: ${inserted}, Updated: ${updated}, Total: ${SCHEMES.length}`);
+    return { inserted, updated, total: SCHEMES.length };
+  } catch (error) {
+    console.error('[Govt Schemes] Error during schemes sync:', error.message);
+    return { inserted: 0, updated: 0, error: error.message };
+  }
 }
 
-seedSchemes();
+const startGovtSchemesService = () => {
+  console.log('[Govt Schemes] Starting automated government schemes service...');
+  
+  // Run initial sync on startup (non-blocking)
+  syncGovtSchemes().catch(err => {
+    console.error('[Govt Schemes] Initial sync failed:', err.message);
+  });
+
+  // Schedule recurring sync every 12 hours (at minute 0 of hours 0 and 12)
+  cron.schedule('0 */12 * * *', () => {
+    console.log('[Govt Schemes] Scheduled refresh triggered...');
+    syncGovtSchemes().catch(err => {
+      console.error('[Govt Schemes] Scheduled sync error:', err.message);
+    });
+  });
+};
+
+if (require.main === module) {
+  syncGovtSchemes()
+    .then(() => {
+      console.log('[Govt Schemes] Manual sync finished.');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error('[Govt Schemes] Manual sync failed:', err);
+      process.exit(1);
+    });
+}
+
+module.exports = { syncGovtSchemes, startGovtSchemesService };

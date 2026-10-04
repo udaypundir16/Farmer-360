@@ -1,12 +1,26 @@
 const marketService = require('../services/market.service');
 const { fetchMarketPrices } = require('../../scripts/fetchMarketPrices');
+const { syncGovtSchemes } = require('../../scripts/fetchGovtSchemes');
 const { supabase } = require('../config/database');
+
 // Admin endpoint to manually trigger market price fetch
 exports.triggerManualFetch = async (req, res, next) => {
   try {
     console.log('[Admin] Triggering manual market price fetch...');
     await fetchMarketPrices();
     res.json({ message: 'Market price fetch triggered successfully' });
+  } catch (error) {
+    console.error('[Admin] Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Admin endpoint to manually trigger government schemes sync
+exports.triggerSchemesSync = async (req, res, next) => {
+  try {
+    console.log('[Admin] Triggering manual government schemes sync...');
+    const result = await syncGovtSchemes();
+    res.json({ message: 'Government schemes sync triggered successfully', stats: result });
   } catch (error) {
     console.error('[Admin] Error:', error);
     res.status(500).json({ error: error.message });

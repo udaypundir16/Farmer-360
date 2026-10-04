@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const app = require('./app');
 const logger = require('./utils/logger');
 const { startMarketPriceService } = require('../scripts/fetchMarketPrices');
+const { startGovtSchemesService } = require('../scripts/fetchGovtSchemes');
 
 const PORT = process.env.PORT || 5002;
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -19,6 +20,7 @@ const server = app.listen(PORT, () => {
   console.log(`✓ Environment: ${NODE_ENV}`);
   startMonitor(); // Start the background job
   startMarketPriceService(); // Automatically fetch fresh mandi prices on startup and every 30 mins
+  startGovtSchemesService(); // Automatically fetch & sync fresh schemes on startup and every 12 hours
 });
 
 // Graceful shutdown

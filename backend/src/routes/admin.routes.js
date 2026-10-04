@@ -7,6 +7,9 @@ const { isAdmin } = require('../middleware/admin.middleware');
 // Manually trigger market price fetch (admin only)
 router.post('/market-prices/fetch', verifyToken, isAdmin, adminController.triggerManualFetch);
 
+// Manually trigger government schemes sync (admin only)
+router.post('/schemes/sync', verifyToken, isAdmin, adminController.triggerSchemesSync);
+
 // Get stored prices statistics
 router.get('/market-prices/stats', verifyToken, isAdmin, adminController.getPriceStats);
 
